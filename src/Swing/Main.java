@@ -22,6 +22,7 @@ public class Main
 	private static JFrame frame = new JFrame("\u5B66\u751F\u4FE1\u606F\u6D4F\u89C8");
 	private JMenuItem menuItem_refresh;
 	private JMenuItem menuItem_exit;
+	private JMenuItem menuItem_score_add;
 	private JMenuItem menuItem_add;
 	private JMenuItem menuItem_search;
 	private Object[][] data;
@@ -81,6 +82,9 @@ public class Main
 
 		JMenu menu_edit = new JMenu("\u7F16\u8F91");
 		menuBar.add(menu_edit);
+		
+		menuItem_score_add = new JMenuItem("\u6210\u7EE9\u5F55\u5165");
+		menu_edit.add(menuItem_score_add);
 
 		menuItem_add = new JMenuItem("\u6570\u636E\u5F55\u5165");
 		menu_edit.add(menuItem_add);
@@ -102,6 +106,16 @@ public class Main
 				System.exit(0);
 			}
 		});
+		menuItem_score_add.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				new ScoreInput();
+			}
+		});
 		menuItem_add.addActionListener(new ActionListener()
 		{
 			
@@ -111,13 +125,23 @@ public class Main
 				// TODO Auto-generated method stub
 				try
 				{
-					InputDialog dialog = new InputDialog();
+					StudentInput dialog = new StudentInput();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e)
 				{
 					e.printStackTrace();
 				}
+			}
+		});
+		menuItem_search.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				new SearchDialog();
 			}
 		});
 	}

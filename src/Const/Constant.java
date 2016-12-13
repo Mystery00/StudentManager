@@ -13,4 +13,5 @@ public class Constant
 	public static final String[] STUDENT_COLUMNS =
 	{ "学号", "姓名", "性别", "专业", "学院", "出生日期", "家庭住址", "电话" };
 	public static final String[] PROFESSIONAL={"计算机科学与技术","软件工程","物联网工程"};
+	public static final String[] CLASS={"课程代码","课程成绩"};
 }
