@@ -12,12 +12,18 @@ import javax.swing.WindowConstants;
 import Class.Student;
 import Const.Constant;
 import Method.SqlUtil;
+import Method.TableRefreshNotify;
 
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
 
 public class Main
 {
@@ -28,6 +34,11 @@ public class Main
 	private JMenuItem menuItem_score_add;
 	private JMenuItem menuItem_add;
 	private JMenuItem menuItem_search;
+	private JTextField search_text;
+	private JButton btn_done;
+	private JComboBox<String> search_type;
+	private JLabel label;
+	private JPanel panel;
 
 	/**
 	 * Create the application.
@@ -43,8 +54,29 @@ public class Main
 	 */
 	private void initialize()
 	{
-		
-		table = new JTable(getData(), Constant.STUDENT_COLUMNS);
+
+		panel = new JPanel();
+		frame.getContentPane().add(panel, BorderLayout.NORTH);
+
+		label = new JLabel("\u67E5\u627E\u7C7B\u578B\uFF1A");
+		panel.add(label);
+
+		search_type = new JComboBox<>();
+		panel.add(search_type);
+		search_type.setModel(new DefaultComboBoxModel<>(Constant.STUDENT_COLUMNS));
+
+		search_text = new JTextField();
+		search_text.setColumns(20);
+		panel.add(search_text);
+
+		btn_done = new JButton("\u786E\u8BA4");
+		panel.add(btn_done);
+		btn_done.setVisible(false);
+		search_text.setVisible(false);
+		search_type.setVisible(false);
+		label.setVisible(false);
+		table = new JTable();
+		TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT_COLUMNS);
 		JScrollPane jScrollPane = new JScrollPane(table);
 		frame.getContentPane().add(jScrollPane);
 
@@ -64,7 +96,7 @@ public class Main
 
 		JMenu menu_edit = new JMenu("\u7F16\u8F91");
 		menuBar.add(menu_edit);
-		
+
 		menuItem_score_add = new JMenuItem("\u6210\u7EE9\u5F55\u5165");
 		menu_edit.add(menuItem_score_add);
 
@@ -87,8 +119,7 @@ public class Main
 			public void actionPerformed(ActionEvent e)
 			{
 				// TODO Auto-generated method stub
-				table=new JTable(getData(), Constant.STUDENT_COLUMNS);
-				
+				TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT_COLUMNS);
 			}
 		});
 		menuItem_exit.addActionListener(new ActionListener()
@@ -100,7 +131,7 @@ public class Main
 		});
 		menuItem_score_add.addActionListener(new ActionListener()
 		{
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -110,7 +141,7 @@ public class Main
 		});
 		menuItem_add.addActionListener(new ActionListener()
 		{
-			
+
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
@@ -132,15 +163,28 @@ public class Main
 			public void actionPerformed(ActionEvent e)
 			{
 				// TODO Auto-generated method stub
-				new SearchDialog();
+				search_text.setVisible(true);
+				btn_done.setVisible(true);
+				search_type.setVisible(true);
+				label.setVisible(true);
 			}
 		});
-		//table.addMouseListener();
+		btn_done.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				// TODO Auto-generated method stub
+				String[] where = Constant.DATABASE_CODE;
+				TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent(where[search_type.getSelectedIndex()],
+						"%" + search_text.getText().toString() + "%")), Constant.STUDENT_COLUMNS);
+			}
+		});
 	}
-	
-	private Object[][] getData()
+
+	private Object[][] getData(List<Student> list)
 	{
-		List<Student> list = SqlUtil.searchStudent();
 		Object[][] data = new Object[list.size()][8];
 		for (int i = 0; i < list.size(); i++)
 		{

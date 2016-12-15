@@ -4,10 +4,19 @@ public class User
 {
 	private String username;
 	private String password;
+	private boolean manager;
+	
+	
+	
 	public User(String username, String password)
+	{
+		this(username, password, false);
+	}
+	public User(String username, String password, boolean manager)
 	{
 		this.username = username;
 		this.password = password;
+		this.manager = manager;
 	}
 	public String getUsername()
 	{
@@ -30,7 +39,7 @@ public class User
 	@Override
 	public String toString()
 	{
-		return "'"+username + "','" + password+"'";
+		return "'" + username + "','" + password + "'," + manager;
 	}
 	
 }

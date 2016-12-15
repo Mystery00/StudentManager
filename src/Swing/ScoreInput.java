@@ -19,26 +19,35 @@ public class ScoreInput extends JDialog
 	private JTextField number_input;
 	private JTextField score_input;
 	private JComboBox<Object> code_input;
-
+	private JButton btn_done;
+	private JButton btn_reset;
 
 	/**
 	 * Create the dialog.
 	 */
 	public ScoreInput()
 	{
+		initialize();
+		monitor();
+	}
+
+	private void initialize()
+	{
+		// TODO Auto-generated method stub
 		setTitle("\u6210\u7EE9\u5F55\u5165");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setVisible(true);
 		setBounds(100, 100, 245, 190);
 		getContentPane().setLayout(null);
 		
-		JLabel code_label = new JLabel("\u8BFE\u7A0B\u4EE3\u7801\uFF1A");
+		JLabel code_label = new JLabel("\u8BFE\u7A0B\u540D\u79F0\uFF1A");
 		code_label.setBounds(10, 10, 80, 15);
 		getContentPane().add(code_label);
 		
 		code_input = new JComboBox<Object>();
-		code_input.setModel(new DefaultComboBoxModel<>(SqlUtil.getStudentClass().toArray()));
+		code_input.setModel(new DefaultComboBoxModel<>(SqlUtil.getStudentClass()));
 		code_input.setBounds(100, 7, 120, 21);
+		code_input.setSelectedIndex(-1);
 		getContentPane().add(code_input);
 		
 		JLabel number_label = new JLabel("\u5B66\u53F7\uFF1A");
@@ -57,12 +66,18 @@ public class ScoreInput extends JDialog
 		score_input.setBounds(100, 87, 120, 21);
 		getContentPane().add(score_input);
 		
-		JButton btn_done = new JButton("\u786E\u8BA4");
+		btn_done = new JButton("\u786E\u8BA4");
 		btn_done.setBounds(126, 118, 93, 23);
 		getContentPane().add(btn_done);
 		
-		JButton btn_reset = new JButton("\u91CD\u7F6E");
+		btn_reset = new JButton("\u91CD\u7F6E");
 		btn_reset.setBounds(10, 118, 93, 23);
 		getContentPane().add(btn_reset);
+	}
+
+	private void monitor()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

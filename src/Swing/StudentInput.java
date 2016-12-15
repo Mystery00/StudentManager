@@ -21,7 +21,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JToggleButton;
 
 public class StudentInput extends JDialog
 {
@@ -90,6 +92,10 @@ public class StudentInput extends JDialog
 		radioButton_girl.setBounds(123, 70, 57, 23);
 		getContentPane().add(radioButton_girl);
 		
+		ButtonGroup buttonGroup=new ButtonGroup();
+		buttonGroup.add(radioButton_boy);
+		buttonGroup.add(radioButton_girl);
+		
 		JLabel phone_label = new JLabel("\u7535\u8BDD\uFF1A");
 		phone_label.setBounds(200, 70, 50, 20);
 		getContentPane().add(phone_label);
@@ -112,6 +118,7 @@ public class StudentInput extends JDialog
 		
 		professional_input.setBounds(60, 160, 320, 21);
 		professional_input.setModel(new DefaultComboBoxModel<>(Constant.PROFESSIONAL));
+		professional_input.setSelectedIndex(-1);
 		getContentPane().add(professional_input);
 		
 		JLabel birthday_label = new JLabel("\u51FA\u751F\u65E5\u671F\uFF1A");
@@ -236,7 +243,6 @@ public class StudentInput extends JDialog
 			public void stateChanged(ChangeEvent arg0)
 			{
 				// TODO Auto-generated method stub
-				radioButton_girl.setSelected(false);
 				sex=1;
 			}
 		});
@@ -247,7 +253,6 @@ public class StudentInput extends JDialog
 			public void stateChanged(ChangeEvent e)
 			{
 				// TODO Auto-generated method stub
-				radioButton_boy.setSelected(false);
 				sex=2;
 			}
 		});

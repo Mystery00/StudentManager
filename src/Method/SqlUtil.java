@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
@@ -19,19 +21,24 @@ public class SqlUtil
 {
 	public static List<Student> searchStudent()
 	{
+		return searchStudent(null, null);
+	}
+
+	public static List<Student> searchStudent(String columns, String data)
+	{
 		List<Student> students = new ArrayList<>();
 		Statement statement = getStatement(Constant.DATABASENAME);
 		ResultSet resultSet = null;
-			try
-			{
-				resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_STUDENT);
-			} catch (SQLException e1)
-			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		try
 		{
+			if (columns != null && data != null)
+			{
+				resultSet = statement
+						.executeQuery("select * from " + Constant.TABLENAME_STUDENT + " where " + columns + " like '" + data+"'");
+			} else
+			{
+				resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_STUDENT);
+			}
 			while (resultSet.next())
 			{
 				String number = resultSet.getString("num");
@@ -50,6 +57,7 @@ public class SqlUtil
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
 		}
 		return students;
 	}
@@ -69,26 +77,19 @@ public class SqlUtil
 		}
 		return resultSet;
 	}
-	
-	public static List<Student_Class> getStudentClass()
+
+	public static String[] getStudentClass()
 	{
-		List<Student_Class> list=new ArrayList<>();
-		Statement statement=getStatement(Constant.DATABASENAME);
+		List<Student_Class> list = new ArrayList<>();
+		Statement statement = getStatement(Constant.DATABASENAME);
 		ResultSet resultSet = null;
 		try
 		{
-			resultSet=statement.executeQuery("select * from "+Constant.TABLENAME_CLASS+";");
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try
-		{
-			while(resultSet.next())
+			resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_CLASS + ";");
+			while (resultSet.next())
 			{
-				String name=resultSet.getString("name");
-				String code=resultSet.getString("code");
+				String name = resultSet.getString("name");
+				String code = resultSet.getString("code");
 				list.add(new Student_Class(name, code));
 			}
 		} catch (SQLException e)
@@ -96,7 +97,12 @@ public class SqlUtil
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return list;
+		String[] classs = new String[list.size()];
+		for (int i = 0; i < list.size(); i++)
+		{
+			classs[i] = list.get(i).getName();
+		}
+		return classs;
 	}
 
 	public static int insertToTable(String tableName, Object data)
