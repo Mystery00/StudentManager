@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
@@ -15,6 +16,10 @@ import Method.SqlUtil;
 import Method.TableRefreshNotify;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -24,6 +29,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 public class Main
 {
@@ -39,6 +45,10 @@ public class Main
 	private JComboBox<String> search_type;
 	private JLabel label;
 	private JPanel panel;
+	private JPopupMenu jPopupMenu = new JPopupMenu();
+	private JMenuItem mShow;
+	private JMenuItem mDel;
+	private List<Student> showList;
 
 	/**
 	 * Create the application.
@@ -62,8 +72,9 @@ public class Main
 		panel.add(label);
 
 		search_type = new JComboBox<>();
-		panel.add(search_type);
 		search_type.setModel(new DefaultComboBoxModel<>(Constant.STUDENT_COLUMNS));
+		search_type.setSelectedIndex(-1);
+		panel.add(search_type);
 
 		search_text = new JTextField();
 		search_text.setColumns(20);
@@ -106,6 +117,12 @@ public class Main
 		menuItem_search = new JMenuItem("\u6570\u636E\u67E5\u8BE2");
 		menu_edit.add(menuItem_search);
 
+		mShow = new JMenuItem("查看成绩");
+		jPopupMenu.add(mShow);
+
+		mDel = new JMenuItem("删除");
+		jPopupMenu.add(mDel);
+
 		frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		frame.setBounds(100, 100, 638, 390);
 		frame.setVisible(true);
@@ -120,6 +137,12 @@ public class Main
 			{
 				// TODO Auto-generated method stub
 				TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT_COLUMNS);
+				search_text.setText(null);
+				search_type.setSelectedItem(-1);
+				search_text.setVisible(false);
+				btn_done.setVisible(false);
+				search_type.setVisible(false);
+				label.setVisible(false);
 			}
 		});
 		menuItem_exit.addActionListener(new ActionListener()
@@ -171,20 +194,67 @@ public class Main
 		});
 		btn_done.addActionListener(new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				// TODO Auto-generated method stub
-				String[] where = Constant.DATABASE_CODE;
-				TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent(where[search_type.getSelectedIndex()],
-						"%" + search_text.getText().toString() + "%")), Constant.STUDENT_COLUMNS);
+				if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
+				{
+					JOptionPane.showMessageDialog(null, "请补全信息！");
+				} else
+				{
+					String[] where = Constant.DATABASE_CODE;
+					TableRefreshNotify.refresh(table,
+							getData(SqlUtil.searchStudent(where[search_type.getSelectedIndex()],
+									"%" + search_text.getText().toString() + "%")),
+							Constant.STUDENT_COLUMNS);
+				}
+			}
+		});
+		mShow.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				new ShowInfo(SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber()));
+			}
+		});
+		mDel.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				int k=SqlUtil.deleteStudent("num", showList.get(table.getSelectedRow()).getNumber());
+				System.out.println(k);
+				if(k==1)
+				{
+					showList.remove(table.getSelectedRow());
+				}
+				TableRefreshNotify.refresh(table, getData(showList), Constant.STUDENT_COLUMNS);
+			}
+		});
+		table.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				// TODO Auto-generated method stub
+				if (e.getButton() == MouseEvent.BUTTON3)
+				{
+					// 弹出右键菜单
+					jPopupMenu.show(frame, e.getX(), e.getY());
+				}
 			}
 		});
 	}
 
 	private Object[][] getData(List<Student> list)
 	{
+		showList = list;
 		Object[][] data = new Object[list.size()][8];
 		for (int i = 0; i < list.size(); i++)
 		{

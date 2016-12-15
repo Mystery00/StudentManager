@@ -12,6 +12,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import Class.Birthday;
+import Class.Score;
 import Class.Student;
 import Class.Student_Class;
 import Class.User;
@@ -19,6 +20,25 @@ import Const.Constant;
 
 public class SqlUtil
 {
+	public static int deleteStudent(String columns, String data)
+	{
+		int k = 0;
+		Statement statement = getStatement(Constant.DATABASENAME);
+		if (statement != null)
+		{
+			try
+			{
+				k = statement.executeUpdate(
+						"delete from " + Constant.TABLENAME_STUDENT + " where " + columns + "=" + data + ";");
+			} catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return k;
+	}
+
 	public static List<Student> searchStudent()
 	{
 		return searchStudent(null, null);
@@ -33,8 +53,8 @@ public class SqlUtil
 		{
 			if (columns != null && data != null)
 			{
-				resultSet = statement
-						.executeQuery("select * from " + Constant.TABLENAME_STUDENT + " where " + columns + " like '" + data+"'");
+				resultSet = statement.executeQuery(
+						"select * from " + Constant.TABLENAME_STUDENT + " where " + columns + " like '" + data + "'");
 			} else
 			{
 				resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_STUDENT);
@@ -78,7 +98,7 @@ public class SqlUtil
 		return resultSet;
 	}
 
-	public static String[] getStudentClass()
+	public static List<Student_Class> getStudentClass()
 	{
 		List<Student_Class> list = new ArrayList<>();
 		Statement statement = getStatement(Constant.DATABASENAME);
@@ -97,12 +117,50 @@ public class SqlUtil
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String[] classs = new String[list.size()];
-		for (int i = 0; i < list.size(); i++)
+		return list;
+	}
+
+	public static String getClassName(String code)
+	{
+		Statement statement = getStatement(Constant.DATABASENAME);
+		String name = null;
+		try
 		{
-			classs[i] = list.get(i).getName();
+			ResultSet resultSet = statement.executeQuery("select * from class where code=" + code + ";");
+			while (resultSet.next())
+			{
+				name = resultSet.getString("name");
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return classs;
+		return name;
+	}
+
+	public static List<Score> getScore(String number)
+	{
+		List<Score> list = new ArrayList<>();
+		Statement statement = getStatement(Constant.DATABASENAME);
+		ResultSet resultSet = null;
+		try
+		{
+			resultSet = statement
+					.executeQuery("select * from " + Constant.TABLENAME_SCORE + " where num=" + number + ";");
+			while (resultSet.next())
+			{
+				String code = resultSet.getString("code");
+				int score = resultSet.getInt("score");
+				list.add(new Score(number, code, score));
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
+		}
+		return list;
 	}
 
 	public static int insertToTable(String tableName, Object data)

@@ -110,6 +110,7 @@ public class SignInDialog extends JDialog
 		JLabel jLabel=new JLabel(icon);
 		getLayeredPane().add(jLabel, new Integer(Integer.MIN_VALUE));
 		jLabel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
+		
 		Container container=getContentPane();
 		((JPanel)container).setOpaque(false);
 	}
