@@ -3,14 +3,22 @@ package Swing;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import Class.Student_Class;
+import Method.SqlUtil;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+
+import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 
 public class ScoreInput extends JDialog
 {
 	private JTextField number_input;
 	private JTextField score_input;
+	private JComboBox<Object> code_input;
 
 
 	/**
@@ -24,22 +32,22 @@ public class ScoreInput extends JDialog
 		setBounds(100, 100, 245, 190);
 		getContentPane().setLayout(null);
 		
+		JLabel code_label = new JLabel("\u8BFE\u7A0B\u4EE3\u7801\uFF1A");
+		code_label.setBounds(10, 10, 80, 15);
+		getContentPane().add(code_label);
+		
+		code_input = new JComboBox<Object>();
+		code_input.setModel(new DefaultComboBoxModel<>(SqlUtil.getStudentClass().toArray()));
+		code_input.setBounds(100, 7, 120, 21);
+		getContentPane().add(code_input);
+		
 		JLabel number_label = new JLabel("\u5B66\u53F7\uFF1A");
-		number_label.setBounds(10, 10, 80, 15);
+		number_label.setBounds(10, 50, 80, 15);
 		getContentPane().add(number_label);
 		
 		number_input = new JTextField();
-		number_input.setBounds(100, 7, 120, 21);
+		number_input.setBounds(100, 47, 120, 21);
 		getContentPane().add(number_input);
-		
-		JLabel code_label = new JLabel("\u8BFE\u7A0B\u4EE3\u7801\uFF1A");
-		code_label.setBounds(10, 50, 80, 15);
-		getContentPane().add(code_label);
-		
-		JComboBox code_input = new JComboBox();
-		code_input.setModel(new DefaultComboBoxModel(new String[] {"134658745", "134658746", "134658747", "134658748"}));
-		code_input.setBounds(100, 47, 120, 21);
-		getContentPane().add(code_input);
 		
 		JLabel score_label = new JLabel("\u6210\u7EE9\uFF1A");
 		score_label.setBounds(10, 90, 80, 15);

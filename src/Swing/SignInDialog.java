@@ -43,6 +43,7 @@ public class SignInDialog extends JDialog
 		SqlUtil.createTable(Constant.DATABASENAME, Constant.TABLENAME_USER, Constant.TABLE_COLUMNS_USER);
 		SqlUtil.createTable(Constant.DATABASENAME, Constant.TABLENAME_STUDENT, Constant.TABLE_COLUMNS_STUDENT);
 		SqlUtil.createTable(Constant.DATABASENAME, Constant.TABLENAME_SCORE, Constant.TABLE_COLUMNS_SCORE);
+		SqlUtil.createTable(Constant.DATABASENAME, Constant.TABLENAME_CLASS, Constant.TABLE_COLUMNS_CLASS);
 
 		/**
 		 * œ‘ æµ«¬ºΩÁ√Ê

@@ -1,12 +1,12 @@
 package Class;
 
-public class Class
+public class Score
 {
 	private String number;
 	private String code;
 	private int score;
 
-	public Class(String number, String code, int score)
+	public Score(String number, String code, int score)
 	{
 		this.number = number;
 		this.code = code;

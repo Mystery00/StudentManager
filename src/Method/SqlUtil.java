@@ -11,6 +11,7 @@ import com.mysql.jdbc.Statement;
 
 import Class.Birthday;
 import Class.Student;
+import Class.Student_Class;
 import Class.User;
 import Const.Constant;
 
@@ -21,14 +22,14 @@ public class SqlUtil
 		List<Student> students = new ArrayList<>();
 		Statement statement = getStatement(Constant.DATABASENAME);
 		ResultSet resultSet = null;
-		try
-		{
-			resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_STUDENT);
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try
+			{
+				resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_STUDENT);
+			} catch (SQLException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		try
 		{
 			while (resultSet.next())
@@ -67,6 +68,35 @@ public class SqlUtil
 			e.printStackTrace();
 		}
 		return resultSet;
+	}
+	
+	public static List<Student_Class> getStudentClass()
+	{
+		List<Student_Class> list=new ArrayList<>();
+		Statement statement=getStatement(Constant.DATABASENAME);
+		ResultSet resultSet = null;
+		try
+		{
+			resultSet=statement.executeQuery("select * from "+Constant.TABLENAME_CLASS+";");
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try
+		{
+			while(resultSet.next())
+			{
+				String name=resultSet.getString("name");
+				String code=resultSet.getString("code");
+				list.add(new Student_Class(name, code));
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	public static int insertToTable(String tableName, Object data)

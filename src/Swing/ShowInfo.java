@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import Class.Class;
+import Class.Score;
 import Const.Constant;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
@@ -18,7 +18,7 @@ public class ShowInfo
 	/**
 	 * Create the frame.
 	 */
-	public ShowInfo(List<Class> list)
+	public ShowInfo(List<Score> list)
 	{
 		Object[][] data =new Object[list.size()][2];
 		for(int i=0;i<list.size();i++)

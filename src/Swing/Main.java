@@ -14,18 +14,20 @@ import Const.Constant;
 import Method.SqlUtil;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class Main
 {
 	private static JFrame frame = new JFrame("\u5B66\u751F\u4FE1\u606F\u6D4F\u89C8");
+	private JTable table;
 	private JMenuItem menuItem_refresh;
 	private JMenuItem menuItem_exit;
 	private JMenuItem menuItem_score_add;
 	private JMenuItem menuItem_add;
 	private JMenuItem menuItem_search;
-	private Object[][] data;
 
 	/**
 	 * Create the application.
@@ -41,28 +43,8 @@ public class Main
 	 */
 	private void initialize()
 	{
-		List<Student> list = SqlUtil.searchStudent();
-		data = new Object[list.size()][8];
-		for (int i = 0; i < list.size(); i++)
-		{
-			data[i][0] = list.get(i).getNumber();
-			data[i][1] = list.get(i).getName();
-			data[i][3] = list.get(i).getProfessional();
-			data[i][4] = list.get(i).getCollege();
-			data[i][5] = list.get(i).getBirthday();
-			data[i][6] = list.get(i).getAddress();
-			data[i][7] = list.get(i).getPhone();
-			switch (list.get(i).getSex())
-			{
-			case 1:// boy
-				data[i][2] = "ÄÐ";
-				break;
-			case 2:// girl
-				data[i][2] = "Å®";
-				break;
-			}
-		}
-		JTable table = new JTable(data, Constant.STUDENT_COLUMNS);
+		
+		table = new JTable(getData(), Constant.STUDENT_COLUMNS);
 		JScrollPane jScrollPane = new JScrollPane(table);
 		frame.getContentPane().add(jScrollPane);
 
@@ -99,6 +81,16 @@ public class Main
 
 	private void monitor()
 	{
+		menuItem_refresh.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				table=new JTable(getData(), Constant.STUDENT_COLUMNS);
+				
+			}
+		});
 		menuItem_exit.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -136,7 +128,6 @@ public class Main
 		});
 		menuItem_search.addActionListener(new ActionListener()
 		{
-			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -144,5 +135,32 @@ public class Main
 				new SearchDialog();
 			}
 		});
+		//table.addMouseListener();
+	}
+	
+	private Object[][] getData()
+	{
+		List<Student> list = SqlUtil.searchStudent();
+		Object[][] data = new Object[list.size()][8];
+		for (int i = 0; i < list.size(); i++)
+		{
+			data[i][0] = list.get(i).getNumber();
+			data[i][1] = list.get(i).getName();
+			data[i][3] = list.get(i).getProfessional();
+			data[i][4] = list.get(i).getCollege();
+			data[i][5] = list.get(i).getBirthday();
+			data[i][6] = list.get(i).getAddress();
+			data[i][7] = list.get(i).getPhone();
+			switch (list.get(i).getSex())
+			{
+			case 1:// boy
+				data[i][2] = "ÄÐ";
+				break;
+			case 2:// girl
+				data[i][2] = "Å®";
+				break;
+			}
+		}
+		return data;
 	}
 }
