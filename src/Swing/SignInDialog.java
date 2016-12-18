@@ -105,14 +105,14 @@ public class SignInDialog extends JDialog
 		btnRegister.setForeground(Color.BLACK);
 		btnRegister.setBounds(227, 187, 93, 23);
 		getContentPane().add(btnRegister);
-		
-		ImageIcon icon=new ImageIcon("src/img/background.jpg");
-		JLabel jLabel=new JLabel(icon);
+
+		ImageIcon icon = new ImageIcon("src/img/background.jpg");
+		JLabel jLabel = new JLabel(icon);
 		getLayeredPane().add(jLabel, new Integer(Integer.MIN_VALUE));
 		jLabel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
-		
-		Container container=getContentPane();
-		((JPanel)container).setOpaque(false);
+
+		Container container = getContentPane();
+		((JPanel) container).setOpaque(false);
 	}
 
 	private void monitor()
@@ -137,7 +137,7 @@ public class SignInDialog extends JDialog
 				try
 				{
 					SignUpDialog dialog = new SignUpDialog();
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e)
 				{
@@ -151,14 +151,16 @@ public class SignInDialog extends JDialog
 	{
 		String username = textField_Username.getText().toString().trim();
 		String password = textField_Password.getText().toString().trim();
-		User user = new User(username, password);
-		ResultSet set = SqlUtil.searchUser(user);
+		User corretUser = new User(username, password);
+		User user = null;
+		ResultSet set = SqlUtil.searchUser(corretUser);
 		boolean result = false;
 		try
 		{
 			while (set.next())
 			{
 				result = username.equals(set.getString("username")) && password.equals(set.getString("password"));
+				user = new User(set.getString("username"), set.getString("password"), set.getBoolean("manager"));
 			}
 			set.close();
 		} catch (SQLException e)
@@ -168,7 +170,7 @@ public class SignInDialog extends JDialog
 		}
 		if (result)
 		{
-			new Main();
+			new Main(user);
 			this.setVisible(false);
 		} else
 		{

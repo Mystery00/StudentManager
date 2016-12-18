@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
 import Class.Student;
+import Class.User;
 import Const.Constant;
 import Method.SqlUtil;
 import Method.TableRefreshNotify;
@@ -33,6 +34,7 @@ import javax.swing.JPopupMenu;
 
 public class Main
 {
+	private User user;
 	private static JFrame frame = new JFrame("\u5B66\u751F\u4FE1\u606F\u6D4F\u89C8");
 	private JTable table;
 	private JMenuItem menuItem_refresh;
@@ -49,12 +51,16 @@ public class Main
 	private JMenuItem mShow;
 	private JMenuItem mDel;
 	private List<Student> showList;
+	private JMenu menu_manager;
+	private JMenuItem menuItem_class;
+	private JMenuItem menuItem_user;
 
 	/**
 	 * Create the application.
 	 */
-	public Main()
+	public Main(User user)
 	{
+		this.user=user;
 		initialize();
 		monitor();
 	}
@@ -82,10 +88,7 @@ public class Main
 
 		btn_done = new JButton("\u786E\u8BA4");
 		panel.add(btn_done);
-		btn_done.setVisible(false);
-		search_text.setVisible(false);
-		search_type.setVisible(false);
-		label.setVisible(false);
+		
 		table = new JTable();
 		TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT_COLUMNS);
 		JScrollPane jScrollPane = new JScrollPane(table);
@@ -116,6 +119,15 @@ public class Main
 
 		menuItem_search = new JMenuItem("\u6570\u636E\u67E5\u8BE2");
 		menu_edit.add(menuItem_search);
+		
+		menu_manager = new JMenu("\u7BA1\u7406\u5458\u64CD\u4F5C");
+		menuBar.add(menu_manager);
+		
+		menuItem_class = new JMenuItem("\u8BFE\u7A0B\u7BA1\u7406");
+		menu_manager.add(menuItem_class);
+		
+		menuItem_user = new JMenuItem("\u7528\u6237\u7BA1\u7406");
+		menu_manager.add(menuItem_user);
 
 		mShow = new JMenuItem("²é¿´³É¼¨");
 		jPopupMenu.add(mShow);
@@ -123,9 +135,20 @@ public class Main
 		mDel = new JMenuItem("É¾³ý");
 		jPopupMenu.add(mDel);
 
-		frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 638, 390);
 		frame.setVisible(true);
+
+		btn_done.setVisible(false);
+		search_text.setVisible(false);
+		search_type.setVisible(false);
+		label.setVisible(false);
+		menu_manager.setVisible(false);
+		
+		if(user.isManager())
+		{
+			menu_manager.setVisible(true);
+		}
 	}
 
 	private void monitor()
@@ -190,6 +213,27 @@ public class Main
 				btn_done.setVisible(true);
 				search_type.setVisible(true);
 				label.setVisible(true);
+			}
+		});
+		menuItem_class.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				new ManagerLayout();
+			}
+		});
+		
+		menuItem_user.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				
 			}
 		});
 		btn_done.addActionListener(new ActionListener()

@@ -36,6 +36,12 @@ public class User
 	{
 		this.password = password;
 	}
+	
+	public boolean isManager()
+	{
+		return manager;
+	}
+	
 	@Override
 	public String toString()
 	{
