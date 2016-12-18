@@ -16,5 +16,5 @@ public class Constant
 	{ "学号", "姓名", "性别", "专业", "学院", "出生日期", "家庭住址", "电话" };
 	public static final String[] DATABASE_CODE={"num","name","sex","professional","college","birthday","address","phone"};
 	public static final String[] PROFESSIONAL={"计算机科学与技术","软件工程","物联网工程"};
-	public static final String[] CLASS={"课程名称","课程成绩"};
+	public static final String[] CLASS={"课程名称","课程代码"};
 }

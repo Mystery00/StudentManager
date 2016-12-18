@@ -318,7 +318,7 @@ public class Main
 				if (e.getButton() == MouseEvent.BUTTON3)
 				{
 					// µ¯³öÓÒ¼ü²Ëµ¥
-					jPopupMenu.show(frame, e.getX(), e.getY());
+					jPopupMenu.show(e.getComponent(), e.getX(),e.getY());
 				}
 			}
 		});

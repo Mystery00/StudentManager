@@ -34,9 +34,8 @@ public class ManagerLayout
 		JScrollPane jScrollPane = new JScrollPane(table);
 		frame.getContentPane().add(jScrollPane);
 
-		frame.getContentPane().setLayout(null);
 		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 300, 300);
 		frame.setVisible(true);
 	}
 	
