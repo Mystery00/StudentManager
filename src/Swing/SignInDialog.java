@@ -106,7 +106,7 @@ public class SignInDialog extends JDialog
 		btnRegister.setBounds(227, 187, 93, 23);
 		getContentPane().add(btnRegister);
 		
-		ImageIcon icon=new ImageIcon("background.jpg");
+		ImageIcon icon=new ImageIcon("src/img/background.jpg");
 		JLabel jLabel=new JLabel(icon);
 		getLayeredPane().add(jLabel, new Integer(Integer.MIN_VALUE));
 		jLabel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
