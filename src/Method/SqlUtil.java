@@ -61,7 +61,7 @@ public class SqlUtil
 			}
 			while (resultSet.next())
 			{
-				String number = resultSet.getString("num");
+				String number = resultSet.getString("number");
 				String name = resultSet.getString("name");
 				int sex = resultSet.getShort("sex");
 				String professional = resultSet.getString("professional");
@@ -147,7 +147,7 @@ public class SqlUtil
 		try
 		{
 			resultSet = statement
-					.executeQuery("select * from " + Constant.TABLENAME_SCORE + " where num=" + number + ";");
+					.executeQuery("select * from " + Constant.TABLENAME_SCORE + " where number=" + number + ";");
 			while (resultSet.next())
 			{
 				String code = resultSet.getString("code");
@@ -172,6 +172,24 @@ public class SqlUtil
 			try
 			{
 				k = statement.executeUpdate("insert into " + tableName + " values(" + data + ");");
+			} catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return k;
+	}
+	
+	public static int updateStudent(String tableName,Student student)
+	{
+		int k = 0;
+		Statement statement = getStatement(Constant.DATABASENAME);
+		if (statement != null)
+		{
+			try
+			{
+				k = statement.executeUpdate("update " + tableName + " " + student.update() + " where number='"+student.getNumber()+"';");
 			} catch (SQLException e)
 			{
 				// TODO Auto-generated catch block

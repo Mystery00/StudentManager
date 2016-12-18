@@ -15,14 +15,14 @@ import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.sql.SQLException;
 
-public class ShowInfo
+public class ShowClass
 {
 	private static JFrame frame = new JFrame("\u6210\u7EE9\u67E5\u8BE2");
 
 	/**
 	 * Create the frame.
 	 */
-	public ShowInfo(List<Score> list)
+	public ShowClass(List<Score> list)
 	{
 		Object[][] data = new Object[list.size()][2];
 		for (int i = 0; i < list.size(); i++)

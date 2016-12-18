@@ -110,5 +110,10 @@ public class Student
 		return "'" + number + "','" + name + "'," + sex + ",'" + professional
 				+ "','" + college + "','" + birthday + "','" + address + "','" + phone + "'";
 	}
+	
+	public String update()
+	{
+		return "set number='"+number+"',name='"+name+"',sex="+sex+",professional='"+professional+"',college='"+college+"',birthday='"+birthday+"',address='"+address+"',phone='"+phone+"'";
+	}
 
 }

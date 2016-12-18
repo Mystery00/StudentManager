@@ -50,6 +50,7 @@ public class Main
 	private JPopupMenu jPopupMenu = new JPopupMenu();
 	private JMenuItem mShow;
 	private JMenuItem mDel;
+	private JMenuItem mEdit;
 	private List<Student> showList;
 	private JMenu menu_manager;
 	private JMenuItem menuItem_class;
@@ -60,7 +61,7 @@ public class Main
 	 */
 	public Main(User user)
 	{
-		this.user=user;
+		this.user = user;
 		initialize();
 		monitor();
 	}
@@ -88,7 +89,7 @@ public class Main
 
 		btn_done = new JButton("\u786E\u8BA4");
 		panel.add(btn_done);
-		
+
 		table = new JTable();
 		TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT_COLUMNS);
 		JScrollPane jScrollPane = new JScrollPane(table);
@@ -119,15 +120,18 @@ public class Main
 
 		menuItem_search = new JMenuItem("\u6570\u636E\u67E5\u8BE2");
 		menu_edit.add(menuItem_search);
-		
+
 		menu_manager = new JMenu("\u7BA1\u7406\u5458\u64CD\u4F5C");
 		menuBar.add(menu_manager);
-		
+
 		menuItem_class = new JMenuItem("\u8BFE\u7A0B\u7BA1\u7406");
 		menu_manager.add(menuItem_class);
-		
+
 		menuItem_user = new JMenuItem("\u7528\u6237\u7BA1\u7406");
 		menu_manager.add(menuItem_user);
+
+		mEdit = new JMenuItem("±à¼­");
+		jPopupMenu.add(mEdit);
 
 		mShow = new JMenuItem("²é¿´³É¼¨");
 		jPopupMenu.add(mShow);
@@ -144,8 +148,8 @@ public class Main
 		search_type.setVisible(false);
 		label.setVisible(false);
 		menu_manager.setVisible(false);
-		
-		if(user.isManager())
+
+		if (user.isManager())
 		{
 			menu_manager.setVisible(true);
 		}
@@ -217,7 +221,7 @@ public class Main
 		});
 		menuItem_class.addActionListener(new ActionListener()
 		{
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -225,15 +229,15 @@ public class Main
 				new ManagerLayout();
 			}
 		});
-		
+
 		menuItem_user.addActionListener(new ActionListener()
 		{
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		btn_done.addActionListener(new ActionListener()
@@ -255,6 +259,27 @@ public class Main
 				}
 			}
 		});
+		mEdit.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				// TODO Auto-generated method stub
+				if (table.getSelectedRow() != -1)
+				{
+					try
+					{
+						StudentInput dialog = new StudentInput(showList.get(table.getSelectedRow()));
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					} catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 		mShow.addActionListener(new ActionListener()
 		{
 
@@ -262,7 +287,10 @@ public class Main
 			public void actionPerformed(ActionEvent e)
 			{
 				// TODO Auto-generated method stub
-				new ShowInfo(SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber()));
+				if (table.getSelectedRow() != -1)
+				{
+					new ShowClass(SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber()));
+				}
 			}
 		});
 		mDel.addActionListener(new ActionListener()
@@ -272,9 +300,9 @@ public class Main
 			public void actionPerformed(ActionEvent e)
 			{
 				// TODO Auto-generated method stub
-				int k=SqlUtil.deleteStudent("num", showList.get(table.getSelectedRow()).getNumber());
+				int k = SqlUtil.deleteStudent("num", showList.get(table.getSelectedRow()).getNumber());
 				System.out.println(k);
-				if(k==1)
+				if (k == 1)
 				{
 					showList.remove(table.getSelectedRow());
 				}

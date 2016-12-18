@@ -31,6 +31,23 @@ public class Birthday
 		this.month=tokens[1];
 		this.day=tokens[2];
 	}
+	
+	
+
+	public int getYear()
+	{
+		return year;
+	}
+
+	public int getMonth()
+	{
+		return month;
+	}
+
+	public int getDay()
+	{
+		return day;
+	}
 
 	@Override
 	public String toString()
