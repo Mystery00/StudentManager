@@ -8,8 +8,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.WindowConstants;
 
+import Class.BackgroundPanel;
 import Class.Student;
 import Class.User;
 import Const.Constant;
@@ -23,18 +23,21 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import java.awt.Toolkit;
 
-public class Main
+public class Main extends JFrame
 {
+	private static final long serialVersionUID = 1L;
 	private User user;
-	private static JFrame frame = new JFrame("\u5B66\u751F\u4FE1\u606F\u6D4F\u89C8");
 	private JTable table;
+	private JScrollPane jScrollPane;
 	private JMenuItem menuItem_refresh;
 	private JMenuItem menuItem_exit;
 	private JMenuItem menuItem_score_add;
@@ -56,6 +59,7 @@ public class Main
 
 	public Main(User user)
 	{
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/img/xhu.jpg")));
 		this.user = user;
 		initialize();
 		monitor();
@@ -63,9 +67,14 @@ public class Main
 
 	private void initialize()
 	{
+		setTitle("\u5B66\u751F\u4FE1\u606F\u6D4F\u89C8");
+		setBounds(100, 100, 1000, 666);
+		setResizable(false);
 
 		panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.NORTH);
+		panel.setBounds(0, 0, 1000, 40);
+		panel.setVisible(false);
+		getContentPane().add(panel);
 
 		label = new JLabel("\u67E5\u627E\u7C7B\u578B\uFF1A");
 		panel.add(label);
@@ -83,13 +92,14 @@ public class Main
 		panel.add(btn_done);
 
 		table = new JTable();
-		TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT);
-		JScrollPane jScrollPane = new JScrollPane(table);
-		frame.getContentPane().add(jScrollPane);
+		table.setRowHeight(20);
+		jScrollPane = new JScrollPane(table);
+		refresh(SqlUtil.searchStudent());
+		getContentPane().add(jScrollPane);
 
 		JMenuBar menuBar = new JMenuBar();
-		frame.setTitle("\u5B66\u751F\u4FE1\u606F");
-		frame.setJMenuBar(menuBar);
+		setTitle("\u5B66\u751F\u4FE1\u606F");
+		setJMenuBar(menuBar);
 
 		JMenu menu_main = new JMenu("\u83DC\u5355");
 		menuBar.add(menu_main);
@@ -131,20 +141,15 @@ public class Main
 		mDel = new JMenuItem("删除");
 		jPopupMenu.add(mDel);
 
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.setBounds(100, 100, 638, 390);
-		frame.setVisible(true);
-
-		btn_done.setVisible(false);
-		search_text.setVisible(false);
-		search_type.setVisible(false);
-		label.setVisible(false);
-		menu_manager.setVisible(false);
-
 		if (user.isManager())
 		{
 			menu_manager.setVisible(true);
 		}
+
+		ImageIcon icon = new ImageIcon(getClass().getResource("/img/main_back.jpg"));
+		BackgroundPanel backgroundPanel = new BackgroundPanel(icon.getImage());
+		backgroundPanel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
+		getContentPane().add(backgroundPanel);
 	}
 
 	private void monitor()
@@ -154,13 +159,10 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT);
 				search_text.setText(null);
 				search_type.setSelectedItem(-1);
-				search_text.setVisible(false);
-				btn_done.setVisible(false);
-				search_type.setVisible(false);
-				label.setVisible(false);
+				panel.setVisible(false);
+				refresh(showList);
 			}
 		});
 		menuItem_exit.addActionListener(new ActionListener()
@@ -201,10 +203,8 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				search_text.setVisible(true);
-				btn_done.setVisible(true);
-				search_type.setVisible(true);
-				label.setVisible(true);
+				panel.setVisible(true);
+				refresh(SqlUtil.searchStudent());
 			}
 		});
 		menuItem_class.addActionListener(new ActionListener()
@@ -308,7 +308,7 @@ public class Main
 						showList.remove(table.getSelectedRow());
 						JOptionPane.showMessageDialog(null, "删除成功！");
 					}
-					TableRefreshNotify.refresh(table, getData(showList), Constant.STUDENT);
+					refresh(showList);
 				} else
 				{
 					JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
@@ -353,5 +353,17 @@ public class Main
 			}
 		}
 		return data;
+	}
+
+	private void refresh(List<Student> list)
+	{
+		TableRefreshNotify.refresh(table, getData(list), Constant.STUDENT);
+		if (panel.isVisible())
+		{
+			jScrollPane.setBounds(0, 40, 1000, 25 + 20 * table.getRowCount());
+		} else
+		{
+			jScrollPane.setBounds(0, 0, 1000, 25 + 20 * table.getRowCount());
+		}
 	}
 }

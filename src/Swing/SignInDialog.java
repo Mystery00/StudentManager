@@ -3,6 +3,7 @@ package Swing;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -104,7 +105,7 @@ public class SignInDialog extends JDialog
 		btnRegister.setBounds(227, 187, 93, 23);
 		getContentPane().add(btnRegister);
 
-		URL imgUrl = getClass().getResource("/img/background.jpg");
+		URL imgUrl = getClass().getResource("/img/sign_back.jpg");
 		ImageIcon icon = new ImageIcon(imgUrl);
 		JLabel jLabel = new JLabel(icon);
 		getLayeredPane().add(jLabel, new Integer(Integer.MIN_VALUE));
@@ -169,8 +170,10 @@ public class SignInDialog extends JDialog
 		}
 		if (result)
 		{
-			new Main(user);
-			this.setVisible(false);
+			Main main = new Main(user);
+			main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			main.setVisible(true);
+			dispose();
 		} else
 		{
 			JOptionPane.showMessageDialog(null, "ÐÅÏ¢´íÎó£¡£¡£¡");
