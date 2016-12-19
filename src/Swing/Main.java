@@ -19,8 +19,6 @@ import Method.TableRefreshNotify;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -162,7 +160,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT_COLUMNS);
 				search_text.setText(null);
 				search_type.setSelectedItem(-1);
@@ -185,7 +182,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				new ScoreInput();
 			}
 		});
@@ -195,7 +191,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
-				// TODO Auto-generated method stub
 				try
 				{
 					StudentInput dialog = new StudentInput();
@@ -212,7 +207,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				search_text.setVisible(true);
 				btn_done.setVisible(true);
 				search_type.setVisible(true);
@@ -225,7 +219,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				new ManagerLayout();
 			}
 		});
@@ -236,7 +229,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -245,7 +237,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// TODO Auto-generated method stub
 				if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
 				{
 					JOptionPane.showMessageDialog(null, "请补全信息！");
@@ -265,7 +256,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// TODO Auto-generated method stub
 				if (table.getSelectedRow() != -1)
 				{
 					try
@@ -286,7 +276,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				if (table.getSelectedRow() != -1)
 				{
 					new ShowClass(SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber()));
@@ -299,7 +288,6 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				int k = SqlUtil.deleteStudent("num", showList.get(table.getSelectedRow()).getNumber());
 				System.out.println(k);
 				if (k == 1)
@@ -314,11 +302,10 @@ public class Main
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				// TODO Auto-generated method stub
 				if (e.getButton() == MouseEvent.BUTTON3)
 				{
 					// 弹出右键菜单
-					jPopupMenu.show(e.getComponent(), e.getX(),e.getY());
+					jPopupMenu.show(e.getComponent(), e.getX(), e.getY());
 				}
 			}
 		});

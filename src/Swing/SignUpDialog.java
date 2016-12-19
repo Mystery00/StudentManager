@@ -30,9 +30,6 @@ public class SignUpDialog extends JDialog
 	private JTextField textField_Password;
 	private JButton btnDone;
 
-	/**
-	 * Create the dialog.
-	 */
 	public SignUpDialog()
 	{
 		initialize();
@@ -41,7 +38,6 @@ public class SignUpDialog extends JDialog
 
 	private void initialize()
 	{
-		// TODO Auto-generated method stub
 		setTitle("\u6CE8\u518C");
 		setBounds(100, 100, 334, 255);
 		getContentPane().setLayout(null);
@@ -75,13 +71,12 @@ public class SignUpDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// TODO Auto-generated method stub
 				if (!InputFormat.isEmpty(textField_Username) && !InputFormat.isEmpty(textField_Password))
 				{
 					String username = textField_Username.getText().toString().trim();
 					String password = textField_Password.getText().toString().trim();
 					User user = new User(username, password);
-					if (SqlUtil.insertToTable(Constant.TABLENAME_USER, user) == 1)
+					if (SqlUtil.insertToTable(Constant.TABLENAME_USER, Constant.COLUMNS_USER, user) == 1)
 					{
 						JOptionPane.showMessageDialog(null, "×¢²á³É¹¦£¡£¡£¡");
 						return;

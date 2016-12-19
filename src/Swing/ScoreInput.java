@@ -22,6 +22,7 @@ import javax.swing.DefaultComboBoxModel;
 
 public class ScoreInput extends JDialog
 {
+	private static final long serialVersionUID = 1L;
 	private JTextField number_input;
 	private JTextField score_input;
 	private JComboBox<Object> code_input;
@@ -40,7 +41,6 @@ public class ScoreInput extends JDialog
 
 	private void initialize()
 	{
-		// TODO Auto-generated method stub
 		list = SqlUtil.getStudentClass();
 		String[] classs = new String[list.size()];
 		for (int i = 0; i < list.size(); i++)
@@ -91,20 +91,19 @@ public class ScoreInput extends JDialog
 
 	private void monitor()
 	{
-		// TODO Auto-generated method stub
 		btn_done.addActionListener(new ActionListener()
 		{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// TODO Auto-generated method stub
 				if (InputFormat.isNumber(score_input) && InputFormat.isNumber(number_input))
 				{
 					Student_Class sClass = list.get(code_input.getSelectedIndex());
 					String number = number_input.getText().toString();
 					int score = Integer.parseInt(score_input.getText().toString());
-					SqlUtil.insertToTable(Constant.TABLENAME_SCORE, new Score(number, sClass.getCode(), score));
+					SqlUtil.insertToTable(Constant.TABLENAME_SCORE, Constant.COLUMNS_SCORE,
+							new Score(number, sClass.getCode(), score));
 					JOptionPane.showMessageDialog(null, "Â¼Èë³É¹¦£¡");
 				} else
 				{
@@ -114,11 +113,10 @@ public class ScoreInput extends JDialog
 		});
 		btn_reset.addActionListener(new ActionListener()
 		{
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				number_input.setText(null);
 				code_input.setSelectedIndex(-1);
 				score_input.setText(null);

@@ -20,6 +20,24 @@ import Const.Constant;
 
 public class SqlUtil
 {
+	public static int deleteClass(int id)
+	{
+		int k = 0;
+		Statement statement = getStatement(Constant.DATABASENAME);
+		if (statement != null)
+		{
+			try
+			{
+				k = statement.executeUpdate("delete from " + Constant.TABLENAME_CLASS + " where _id=" + id + ";");
+			} catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return k;
+	}
+
 	public static int deleteStudent(String columns, String data)
 	{
 		int k = 0;
@@ -61,6 +79,7 @@ public class SqlUtil
 			}
 			while (resultSet.next())
 			{
+				int id = resultSet.getInt("_id");
 				String number = resultSet.getString("number");
 				String name = resultSet.getString("name");
 				int sex = resultSet.getShort("sex");
@@ -70,7 +89,7 @@ public class SqlUtil
 				birthday = new Birthday(resultSet.getString("birthday"));
 				String address = resultSet.getString("address");
 				String phone = resultSet.getString("phone");
-				Student student = new Student(number, name, sex, professional, college, birthday, address, phone);
+				Student student = new Student(id, number, name, sex, professional, college, birthday, address, phone);
 				students.add(student);
 			}
 		} catch (SQLException e)
@@ -108,9 +127,10 @@ public class SqlUtil
 			resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_CLASS + ";");
 			while (resultSet.next())
 			{
+				int id = resultSet.getInt("_id");
 				String name = resultSet.getString("name");
 				String code = resultSet.getString("code");
-				list.add(new Student_Class(name, code));
+				list.add(new Student_Class(id, name, code));
 			}
 		} catch (SQLException e)
 		{
@@ -150,9 +170,10 @@ public class SqlUtil
 					.executeQuery("select * from " + Constant.TABLENAME_SCORE + " where number=" + number + ";");
 			while (resultSet.next())
 			{
+				int id = resultSet.getInt("_id");
 				String code = resultSet.getString("code");
 				int score = resultSet.getInt("score");
-				list.add(new Score(number, code, score));
+				list.add(new Score(id, number, code, score));
 			}
 		} catch (SQLException e)
 		{
@@ -163,7 +184,7 @@ public class SqlUtil
 		return list;
 	}
 
-	public static int insertToTable(String tableName, Object data)
+	public static int insertToTable(String tableName, String columns, Object data)
 	{
 		int k = 0;
 		Statement statement = getStatement(Constant.DATABASENAME);
@@ -171,7 +192,7 @@ public class SqlUtil
 		{
 			try
 			{
-				k = statement.executeUpdate("insert into " + tableName + " values(" + data + ");");
+				k = statement.executeUpdate("insert into " + tableName + columns + " values(" + data + ");");
 			} catch (SQLException e)
 			{
 				// TODO Auto-generated catch block
@@ -180,8 +201,8 @@ public class SqlUtil
 		}
 		return k;
 	}
-	
-	public static int updateStudent(String tableName,Student student)
+
+	public static int updateStudent(Student student)
 	{
 		int k = 0;
 		Statement statement = getStatement(Constant.DATABASENAME);
@@ -189,7 +210,27 @@ public class SqlUtil
 		{
 			try
 			{
-				k = statement.executeUpdate("update " + tableName + " " + student.update() + " where number='"+student.getNumber()+"';");
+				k = statement.executeUpdate("update " + Constant.TABLENAME_STUDENT + " " + student.update()
+						+ " where _id=" + student.get_id() + ";");
+			} catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return k;
+	}
+
+	public static int updateClass(Student_Class student)
+	{
+		int k = 0;
+		Statement statement = getStatement(Constant.DATABASENAME);
+		if (statement != null)
+		{
+			try
+			{
+				k = statement.executeUpdate("update " + Constant.TABLENAME_CLASS + " " + student.update()
+						+ " where _id=" + student.get_id() + ";");
 			} catch (SQLException e)
 			{
 				// TODO Auto-generated catch block

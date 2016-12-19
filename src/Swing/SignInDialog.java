@@ -70,7 +70,6 @@ public class SignInDialog extends JDialog
 
 	private void initialize()
 	{
-		// TODO Auto-generated method stub
 		setTitle("\u767B\u9646");
 		setBounds(100, 100, 400, 300);
 		setResizable(false);
@@ -160,7 +159,8 @@ public class SignInDialog extends JDialog
 			while (set.next())
 			{
 				result = username.equals(set.getString("username")) && password.equals(set.getString("password"));
-				user = new User(set.getString("username"), set.getString("password"), set.getBoolean("manager"));
+				user = new User(set.getInt("_id"), set.getString("username"), set.getString("password"),
+						set.getBoolean("manager"));
 			}
 			set.close();
 		} catch (SQLException e)

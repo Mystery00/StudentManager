@@ -23,11 +23,11 @@ import java.util.Calendar;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JToggleButton;
 
 public class StudentInput extends JDialog
 {
 	private static final long serialVersionUID = 1L;
+	private Student localStudent;
 	private JTextField number_input;
 	private JTextField name_input;
 	private JTextField phone_input;
@@ -59,6 +59,7 @@ public class StudentInput extends JDialog
 
 	public StudentInput(Student student)
 	{
+		localStudent = student;
 		tag = 1;
 		initialize();
 		setDefault(student);
@@ -67,13 +68,12 @@ public class StudentInput extends JDialog
 
 	private void setDefault(Student student)
 	{
-		// TODO Auto-generated method stub
 		number_input.setText(student.getNumber());
 		name_input.setText(student.getName());
 		phone_input.setText(student.getPhone());
 		collage_input.setText(student.getCollege());
 		address_input.setText(student.getAddress());
-		sex=student.getSex();
+		sex = student.getSex();
 		if (sex == 1)
 		{
 			radioButton_boy.setSelected(true);
@@ -89,9 +89,9 @@ public class StudentInput extends JDialog
 				break;
 			}
 		}
-		year=student.getBirthday().getYear();
-		month=student.getBirthday().getMonth();
-		day=student.getBirthday().getDay();
+		year = student.getBirthday().getYear();
+		month = student.getBirthday().getMonth();
+		day = student.getBirthday().getDay();
 		month_input.setEnabled(true);
 		day_input.setEnabled(true);
 		year_input.setSelectedIndex(student.getBirthday().getYear() - 1960);
@@ -102,7 +102,6 @@ public class StudentInput extends JDialog
 
 	private void initialize()
 	{
-		// TODO Auto-generated method stub
 		setTitle("\u4FE1\u606F\u5F55\u5165");
 		setBounds(100, 100, 450, 373);
 		getContentPane().setLayout(null);
@@ -222,14 +221,12 @@ public class StudentInput extends JDialog
 
 	private void monitor()
 	{
-		// TODO Auto-generated method stub
 		year_input.addActionListener(new ActionListener()
 		{
 
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				month_input.setEnabled(true);
 				year = Integer.parseInt(year_input.getSelectedItem().toString());
 			}
@@ -240,7 +237,6 @@ public class StudentInput extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// TODO Auto-generated method stub
 				month = Integer.parseInt(month_input.getSelectedItem().toString());
 				setDays(year, month, day_input);
 			}
@@ -251,7 +247,6 @@ public class StudentInput extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// TODO Auto-generated method stub
 				day = Integer.parseInt(day_input.getSelectedItem().toString());
 			}
 		});
@@ -261,7 +256,6 @@ public class StudentInput extends JDialog
 			@Override
 			public void stateChanged(ChangeEvent arg0)
 			{
-				// TODO Auto-generated method stub
 				sex = 1;
 			}
 		});
@@ -271,17 +265,14 @@ public class StudentInput extends JDialog
 			@Override
 			public void stateChanged(ChangeEvent e)
 			{
-				// TODO Auto-generated method stub
 				sex = 2;
 			}
 		});
 		button_done.addActionListener(new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				if (InputFormat.isNumber(number_input) && !InputFormat.isEmpty(name_input)
 						&& InputFormat.isNumber(phone_input) && !InputFormat.isEmpty(address_input)
 						&& !isEmpty(professional_input) && !isEmpty(day_input))
@@ -293,13 +284,14 @@ public class StudentInput extends JDialog
 					Birthday birthday = new Birthday(year + "-" + month + "-" + day);
 					String address = address_input.getText().toString();
 					String phone = phone_input.getText().toString().trim();
-					Student student = new Student(number, name, sex, professional, college, birthday, address, phone);
+					Student student = new Student(localStudent.get_id(), number, name, sex, professional, college,
+							birthday, address, phone);
 					if (tag == 0)
 					{
-						SqlUtil.insertToTable(Constant.TABLENAME_STUDENT, student);
+						SqlUtil.insertToTable(Constant.TABLENAME_STUDENT, Constant.COLUMNS_STUDENT, student);
 					} else
 					{
-						SqlUtil.updateStudent(Constant.TABLENAME_STUDENT, student);
+						SqlUtil.updateStudent(student);
 					}
 					JOptionPane.showMessageDialog(null, "信息录入成功！！！");
 				} else

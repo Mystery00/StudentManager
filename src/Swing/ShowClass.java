@@ -7,13 +7,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import Class.Score;
-import Class.Student_Class;
 import Const.Constant;
 import Method.SqlUtil;
 
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
-import java.sql.SQLException;
 
 public class ShowClass
 {
