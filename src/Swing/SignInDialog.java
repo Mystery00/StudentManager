@@ -15,6 +15,7 @@ import Method.InputFormat;
 import Method.SqlUtil;
 
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.Container;
@@ -103,7 +104,8 @@ public class SignInDialog extends JDialog
 		btnRegister.setBounds(227, 187, 93, 23);
 		getContentPane().add(btnRegister);
 
-		ImageIcon icon = new ImageIcon("src/img/background.jpg");
+		URL imgUrl = getClass().getResource("/img/background.jpg");
+		ImageIcon icon = new ImageIcon(imgUrl);
 		JLabel jLabel = new JLabel(icon);
 		getLayeredPane().add(jLabel, new Integer(Integer.MIN_VALUE));
 		jLabel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
