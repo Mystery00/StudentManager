@@ -13,12 +13,16 @@ import Class.BackgroundPanel;
 import Class.Student;
 import Class.User;
 import Const.Constant;
+import Method.BrowerOpen;
 import Method.SqlUtil;
 import Method.TableRefreshNotify;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -30,6 +34,9 @@ import javax.swing.JLabel;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+
+import java.awt.Desktop;
+import java.awt.Desktop.Action;
 import java.awt.Toolkit;
 
 public class Main extends JFrame
@@ -56,6 +63,9 @@ public class Main extends JFrame
 	private JMenu menu_manager;
 	private JMenuItem menuItem_class;
 	private JMenuItem menuItem_user;
+	private JMenu menu_about;
+	private JMenuItem menuItem_code;
+	private JMenuItem menuItem_github;
 
 	public Main(User user)
 	{
@@ -132,6 +142,15 @@ public class Main extends JFrame
 
 		menuItem_user = new JMenuItem("\u7528\u6237\u7BA1\u7406");
 		menu_manager.add(menuItem_user);
+
+		menu_about = new JMenu("\u5173\u4E8E");
+		menuBar.add(menu_about);
+
+		menuItem_code = new JMenuItem("\u8F6F\u4EF6\u6E90\u7801");
+		menu_about.add(menuItem_code);
+
+		menuItem_github = new JMenuItem("GitHub");
+		menu_about.add(menuItem_github);
 
 		mEdit = new JMenuItem("±à¼­");
 		jPopupMenu.add(mEdit);
@@ -229,6 +248,24 @@ public class Main extends JFrame
 				UserManager userManager = new UserManager();
 				userManager.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				userManager.setVisible(true);
+			}
+		});
+		menuItem_code.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				BrowerOpen.openUrl("https://github.com/Mystery00/StudentManager");
+			}
+		});
+		menuItem_github.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				BrowerOpen.openUrl("https://github.com/Mystery00");
 			}
 		});
 		btn_done.addActionListener(new ActionListener()
