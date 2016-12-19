@@ -125,8 +125,8 @@ public class SqlUtil
 		ResultSet resultSet = null;
 		try
 		{
-			resultSet = statement
-					.executeQuery("select * from " + Constant.TABLENAME_USER + " where username=" + user.getUsername());
+			resultSet = statement.executeQuery(
+					"select * from " + Constant.TABLENAME_USER + " where username='" + user.getUsername() + "'");
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -179,6 +179,29 @@ public class SqlUtil
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
+		}
+		return list;
+	}
+
+	public static List<Student_Class> getClass(String code)
+	{
+		List<Student_Class> list = new ArrayList<>();
+		Statement statement = getStatement(Constant.DATABASENAME);
+		ResultSet resultSet = null;
+		try
+		{
+			resultSet = statement
+					.executeQuery("select * from " + Constant.TABLENAME_CLASS + " where code='" + code + "';");
+			while (resultSet.next())
+			{
+				int id = resultSet.getInt("_id");
+				String name = resultSet.getString("name");
+				list.add(new Student_Class(id, name, code));
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return list;
 	}
@@ -292,6 +315,25 @@ public class SqlUtil
 			{
 				k = statement.executeUpdate("update " + Constant.TABLENAME_USER + " " + user.update() + " where _id="
 						+ user.get_id() + ";");
+			} catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return k;
+	}
+
+	public static int update(Score score)
+	{
+		int k = 0;
+		Statement statement = getStatement(Constant.DATABASENAME);
+		if (statement != null)
+		{
+			try
+			{
+				k = statement.executeUpdate("update " + Constant.TABLENAME_SCORE + " " + score.update() + " where _id="
+						+ score.get_id() + ";");
 			} catch (SQLException e)
 			{
 				// TODO Auto-generated catch block

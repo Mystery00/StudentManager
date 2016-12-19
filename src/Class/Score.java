@@ -61,4 +61,8 @@ public class Score
 		return "'" + number + "','" + code + "'," + score;
 	}
 
+	public String update()
+	{
+		return "set number='"+number+"',code='"+code+"',score="+score;
+	}
 }

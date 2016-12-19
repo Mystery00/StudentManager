@@ -12,6 +12,8 @@ import Method.InputFormat;
 import Method.SqlUtil;
 
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 
@@ -85,13 +87,26 @@ public class SignUpDialog extends JDialog
 				{
 					String username = textField_Username.getText().toString().trim();
 					String password = textField_Password.getText().toString().trim();
+					User user = new User(username, password);
+					ResultSet set = SqlUtil.searchUser(user);
+					try
+					{
+						if (set.next())
+						{
+							tag = 1;
+							local = new User(set.getInt("_id"), set.getString("username"), set.getString("password"),
+									set.getBoolean("manager"));
+						}
+					} catch (SQLException e)
+					{
+						e.printStackTrace();
+					}
 					if (tag == 0)
 					{
-						User user = new User(username, password);
 						SqlUtil.insertToTable(Constant.TABLENAME_USER, Constant.COLUMNS_USER, user);
 					} else
 					{
-						User user = new User(local.get_id(), username, password, manager_input.isSelected());
+						user = new User(local.get_id(), username, password, manager_input.isSelected());
 						SqlUtil.updateUser(user);
 					}
 					JOptionPane.showMessageDialog(null, "Â¼Èë³É¹¦£¡£¡£¡");

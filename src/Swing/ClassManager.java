@@ -19,9 +19,9 @@ import Const.Constant;
 import Method.SqlUtil;
 import Method.TableRefreshNotify;
 
-public class ClassManager
+public class ClassManager extends JFrame
 {
-	private static JFrame frame = new JFrame("\u7BA1\u7406\u5458\u64CD\u4F5C\u754C\u9762");
+	private static final long serialVersionUID = 1L;
 	private static List<Student_Class> list = SqlUtil.getStudentClass();
 	private JScrollPane jScrollPane;
 	private JTable table;
@@ -39,10 +39,13 @@ public class ClassManager
 
 	private void initialize()
 	{
+		setTitle("\u8BFE\u7A0B\u7BA1\u7406");
+		setBounds(100, 100, 300, 300);
+
 		table = new JTable();
 		TableRefreshNotify.refresh(table, getData(list), Constant.CLASS);
 		jScrollPane = new JScrollPane(table);
-		frame.getContentPane().add(jScrollPane);
+		getContentPane().add(jScrollPane);
 
 		mEdt = new JMenuItem("编辑");
 		jPopupMenu.add(mEdt);
@@ -55,11 +58,6 @@ public class ClassManager
 
 		mRef = new JMenuItem("刷新");
 		jPopupMenu.add(mRef);
-		frame.setTitle("\u8BFE\u7A0B\u7BA1\u7406");
-
-		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		frame.setBounds(100, 100, 300, 300);
-		frame.setVisible(true);
 	}
 
 	private void monitor()
@@ -69,7 +67,15 @@ public class ClassManager
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				new ClassInput(list.get(table.getSelectedRow()));
+				if (table.getSelectedColumn() != -1)
+				{
+					ClassInput classInput = new ClassInput(list.get(table.getSelectedRow()));
+					classInput.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					classInput.setVisible(true);
+				} else
+				{
+					JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
+				}
 			}
 		});
 		mIns.addActionListener(new ActionListener()
@@ -77,7 +83,9 @@ public class ClassManager
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				new ClassInput();
+				ClassInput classInput = new ClassInput();
+				classInput.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				classInput.setVisible(true);
 			}
 		});
 		mDel.addActionListener(new ActionListener()

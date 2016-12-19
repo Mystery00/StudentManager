@@ -213,7 +213,9 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				new ClassManager();
+				ClassManager classManager = new ClassManager();
+				classManager.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				classManager.setVisible(true);
 			}
 		});
 
@@ -223,7 +225,9 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				new UserManager();
+				UserManager userManager = new UserManager();
+				userManager.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				userManager.setVisible(true);
 			}
 		});
 		btn_done.addActionListener(new ActionListener()
@@ -261,6 +265,9 @@ public class Main
 					{
 						e.printStackTrace();
 					}
+				} else
+				{
+					JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
 				}
 			}
 		});
@@ -272,7 +279,19 @@ public class Main
 			{
 				if (table.getSelectedRow() != -1)
 				{
-					new ShowScore(SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber()));
+					try
+					{
+						ShowScore dialog = new ShowScore(
+								SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber()));
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					} catch (Exception e1)
+					{
+						e1.printStackTrace();
+					}
+				} else
+				{
+					JOptionPane.showMessageDialog(null, "请选择要查看的数据！");
 				}
 			}
 		});

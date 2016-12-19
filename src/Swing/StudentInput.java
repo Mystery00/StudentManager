@@ -289,6 +289,11 @@ public class StudentInput extends JDialog
 					Birthday birthday = new Birthday(year + "-" + month + "-" + day);
 					String address = address_input.getText().toString();
 					String phone = phone_input.getText().toString().trim();
+					if (!SqlUtil.searchStudent("number", number).isEmpty())
+					{
+						tag = 1;
+						localStudent = SqlUtil.searchStudent("number", number).get(0);
+					}
 					if (tag == 0)
 					{
 						Student student = new Student(number, name, sex, professional, college, birthday, address,

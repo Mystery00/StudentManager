@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -19,9 +18,9 @@ import Const.Constant;
 import Method.SqlUtil;
 import Method.TableRefreshNotify;
 
-public class UserManager
+public class UserManager extends JDialog
 {
-	private static JFrame frame = new JFrame("\u7BA1\u7406\u5458\u64CD\u4F5C\u754C\u9762");
+	private static final long serialVersionUID = 1L;
 	private static List<User> list = SqlUtil.getUser();
 	private JScrollPane jScrollPane;
 	private JTable table;
@@ -39,10 +38,13 @@ public class UserManager
 
 	private void initialize()
 	{
+		setTitle("\u7528\u6237\u7BA1\u7406");
+		setBounds(100, 100, 300, 300);
+
 		table = new JTable();
 		TableRefreshNotify.refresh(table, getData(list), Constant.USER);
 		jScrollPane = new JScrollPane(table);
-		frame.getContentPane().add(jScrollPane);
+		getContentPane().add(jScrollPane);
 
 		mEdt = new JMenuItem("编辑");
 		jPopupMenu.add(mEdt);
@@ -55,11 +57,6 @@ public class UserManager
 
 		mRef = new JMenuItem("刷新");
 		jPopupMenu.add(mRef);
-		frame.setTitle("\u7528\u6237\u7BA1\u7406");
-
-		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		frame.setBounds(100, 100, 300, 300);
-		frame.setVisible(true);
 	}
 
 	private void monitor()
@@ -69,14 +66,20 @@ public class UserManager
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				try
+				if (table.getSelectedColumn() != -1)
 				{
-					SignUpDialog dialog = new SignUpDialog(list.get(table.getSelectedRow()));
-					dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-					dialog.setVisible(true);
-				} catch (Exception e1)
+					try
+					{
+						SignUpDialog dialog = new SignUpDialog(list.get(table.getSelectedRow()));
+						dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+						dialog.setVisible(true);
+					} catch (Exception e1)
+					{
+						e1.printStackTrace();
+					}
+				} else
 				{
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
 				}
 			}
 		});

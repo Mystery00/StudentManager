@@ -23,9 +23,6 @@ import java.awt.Color;
 
 public class SignInDialog extends JDialog
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField textField_Username;
 	private JPasswordField textField_Password;
