@@ -83,13 +83,15 @@ public class ClassInput
 			{
 				if (!InputFormat.isEmpty(name_input) && InputFormat.isNumber(code_input))
 				{
-					Student_Class student_Class = new Student_Class(local.get_id(), name_input.getText().toString(),
-							code_input.getText().toString());
 					if (tag == 0)
 					{
+						Student_Class student_Class = new Student_Class(name_input.getText().toString(),
+								code_input.getText().toString());
 						SqlUtil.insertToTable(Constant.TABLENAME_CLASS, Constant.COLUMNS_CLASS, student_Class);
 					} else
 					{
+						Student_Class student_Class = new Student_Class(local.get_id(), name_input.getText().toString(),
+								code_input.getText().toString());
 						SqlUtil.updateClass(student_Class);
 					}
 					JOptionPane.showMessageDialog(null, "Â¼Èë³É¹¦£¡");

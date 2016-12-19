@@ -1,15 +1,10 @@
 package Swing;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import Class.User;
 import Const.Constant;
@@ -18,22 +13,33 @@ import Method.SqlUtil;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
 
 public class SignUpDialog extends JDialog
 {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	private User local;
 	private JTextField textField_Username;
 	private JTextField textField_Password;
+	private JRadioButton manager_input;
 	private JButton btnDone;
+	private int tag = 0;
 
 	public SignUpDialog()
 	{
 		initialize();
 		monitor();
+	}
+
+	public SignUpDialog(User user)
+	{
+		this();
+		tag = 1;
+		textField_Username.setText(user.getUsername());
+		textField_Password.setText(user.getPassword());
+		manager_input.setVisible(true);
+		manager_input.setSelected(user.isManager());
+		local = user;
 	}
 
 	private void initialize()
@@ -58,8 +64,13 @@ public class SignUpDialog extends JDialog
 		textField_Password.setBounds(95, 105, 200, 21);
 		getContentPane().add(textField_Password);
 
+		manager_input = new JRadioButton("\u7BA1\u7406\u5458");
+		manager_input.setBounds(95, 181, 104, 23);
+		manager_input.setVisible(false);
+		getContentPane().add(manager_input);
+
 		btnDone = new JButton("\u5B8C\u6210");
-		btnDone.setBounds(180, 180, 90, 25);
+		btnDone.setBounds(205, 181, 90, 25);
 		getContentPane().add(btnDone);
 	}
 
@@ -67,7 +78,6 @@ public class SignUpDialog extends JDialog
 	{
 		btnDone.addActionListener(new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -75,14 +85,20 @@ public class SignUpDialog extends JDialog
 				{
 					String username = textField_Username.getText().toString().trim();
 					String password = textField_Password.getText().toString().trim();
-					User user = new User(username, password);
-					if (SqlUtil.insertToTable(Constant.TABLENAME_USER, Constant.COLUMNS_USER, user) == 1)
+					if (tag == 0)
 					{
-						JOptionPane.showMessageDialog(null, "注册成功！！！");
-						return;
+						User user = new User(username, password);
+						SqlUtil.insertToTable(Constant.TABLENAME_USER, Constant.COLUMNS_USER, user);
+					} else
+					{
+						User user = new User(local.get_id(), username, password, manager_input.isSelected());
+						SqlUtil.updateUser(user);
 					}
+					JOptionPane.showMessageDialog(null, "录入成功！！！");
+				} else
+				{
+					JOptionPane.showMessageDialog(null, "格式错误！！！");
 				}
-				JOptionPane.showMessageDialog(null, "格式错误！！！");
 			}
 		});
 	}

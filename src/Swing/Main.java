@@ -54,9 +54,6 @@ public class Main
 	private JMenuItem menuItem_class;
 	private JMenuItem menuItem_user;
 
-	/**
-	 * Create the application.
-	 */
 	public Main(User user)
 	{
 		this.user = user;
@@ -64,9 +61,6 @@ public class Main
 		monitor();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize()
 	{
 
@@ -77,7 +71,7 @@ public class Main
 		panel.add(label);
 
 		search_type = new JComboBox<>();
-		search_type.setModel(new DefaultComboBoxModel<>(Constant.STUDENT_COLUMNS));
+		search_type.setModel(new DefaultComboBoxModel<>(Constant.STUDENT));
 		search_type.setSelectedIndex(-1);
 		panel.add(search_type);
 
@@ -89,7 +83,7 @@ public class Main
 		panel.add(btn_done);
 
 		table = new JTable();
-		TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT_COLUMNS);
+		TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT);
 		JScrollPane jScrollPane = new JScrollPane(table);
 		frame.getContentPane().add(jScrollPane);
 
@@ -160,7 +154,7 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT_COLUMNS);
+				TableRefreshNotify.refresh(table, getData(SqlUtil.searchStudent()), Constant.STUDENT);
 				search_text.setText(null);
 				search_type.setSelectedItem(-1);
 				search_text.setVisible(false);
@@ -219,7 +213,7 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				new ManagerLayout();
+				new ClassManager();
 			}
 		});
 
@@ -229,7 +223,7 @@ public class Main
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-
+				new UserManager();
 			}
 		});
 		btn_done.addActionListener(new ActionListener()
@@ -246,7 +240,7 @@ public class Main
 					TableRefreshNotify.refresh(table,
 							getData(SqlUtil.searchStudent(where[search_type.getSelectedIndex()],
 									"%" + search_text.getText().toString() + "%")),
-							Constant.STUDENT_COLUMNS);
+							Constant.STUDENT);
 				}
 			}
 		});
@@ -278,23 +272,28 @@ public class Main
 			{
 				if (table.getSelectedRow() != -1)
 				{
-					new ShowClass(SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber()));
+					new ShowScore(SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber()));
 				}
 			}
 		});
 		mDel.addActionListener(new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				int k = SqlUtil.deleteStudent("num", showList.get(table.getSelectedRow()).getNumber());
-				System.out.println(k);
-				if (k == 1)
+				if (table.getSelectedColumn() != -1)
 				{
-					showList.remove(table.getSelectedRow());
+					int k = SqlUtil.deleteStudent("number", showList.get(table.getSelectedRow()).getNumber());
+					if (k == 1)
+					{
+						showList.remove(table.getSelectedRow());
+						JOptionPane.showMessageDialog(null, "删除成功！");
+					}
+					TableRefreshNotify.refresh(table, getData(showList), Constant.STUDENT);
+				} else
+				{
+					JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
 				}
-				TableRefreshNotify.refresh(table, getData(showList), Constant.STUDENT_COLUMNS);
 			}
 		});
 		table.addMouseListener(new MouseAdapter()

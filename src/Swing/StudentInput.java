@@ -40,6 +40,7 @@ public class StudentInput extends JDialog
 	private JComboBox<String> month_input = new JComboBox<>();
 	private JComboBox<String> day_input = new JComboBox<>();
 	private JButton button_done;
+	private JButton button_reset;
 	private static int year_count = Calendar.getInstance().get(Calendar.YEAR) - 1960 + 1;
 	private int year;
 	private int month;
@@ -217,6 +218,10 @@ public class StudentInput extends JDialog
 		button_done = new JButton("\u786E\u8BA4");
 		button_done.setBounds(287, 301, 93, 23);
 		getContentPane().add(button_done);
+
+		button_reset = new JButton("\u91CD\u7F6E");
+		button_reset.setBounds(170, 301, 93, 23);
+		getContentPane().add(button_reset);
 	}
 
 	private void monitor()
@@ -284,13 +289,15 @@ public class StudentInput extends JDialog
 					Birthday birthday = new Birthday(year + "-" + month + "-" + day);
 					String address = address_input.getText().toString();
 					String phone = phone_input.getText().toString().trim();
-					Student student = new Student(localStudent.get_id(), number, name, sex, professional, college,
-							birthday, address, phone);
 					if (tag == 0)
 					{
+						Student student = new Student(number, name, sex, professional, college, birthday, address,
+								phone);
 						SqlUtil.insertToTable(Constant.TABLENAME_STUDENT, Constant.COLUMNS_STUDENT, student);
 					} else
 					{
+						Student student = new Student(localStudent.get_id(), number, name, sex, professional, college,
+								birthday, address, phone);
 						SqlUtil.updateStudent(student);
 					}
 					JOptionPane.showMessageDialog(null, "信息录入成功！！！");
@@ -304,6 +311,24 @@ public class StudentInput extends JDialog
 					System.out.println(!isEmpty(day_input));
 					JOptionPane.showMessageDialog(null, "信息错误！！！");
 				}
+			}
+		});
+		button_reset.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				number_input.setText(null);
+				name_input.setText(null);
+				phone_input.setText(null);
+				collage_input.setText(null);
+				address_input.setText(null);
+				radioButton_boy.setSelected(true);
+				professional_input.setSelectedIndex(-1);
+				year_input.setSelectedIndex(0);
+				month_input.setEnabled(false);
+				day_input.setEnabled(false);
 			}
 		});
 	}

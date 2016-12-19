@@ -20,6 +20,24 @@ import Const.Constant;
 
 public class SqlUtil
 {
+	public static int deleteUser(int id)
+	{
+		int k = 0;
+		Statement statement = getStatement(Constant.DATABASENAME);
+		if (statement != null)
+		{
+			try
+			{
+				k = statement.executeUpdate("delete from " + Constant.TABLENAME_USER + " where _id=" + id + ";");
+			} catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return k;
+	}
+
 	public static int deleteClass(int id)
 	{
 		int k = 0;
@@ -140,25 +158,6 @@ public class SqlUtil
 		return list;
 	}
 
-	public static String getClassName(String code)
-	{
-		Statement statement = getStatement(Constant.DATABASENAME);
-		String name = null;
-		try
-		{
-			ResultSet resultSet = statement.executeQuery("select * from class where code=" + code + ";");
-			while (resultSet.next())
-			{
-				name = resultSet.getString("name");
-			}
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return name;
-	}
-
 	public static List<Score> getScore(String number)
 	{
 		List<Score> list = new ArrayList<>();
@@ -182,6 +181,49 @@ public class SqlUtil
 			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
 		}
 		return list;
+	}
+
+	public static List<User> getUser()
+	{
+		List<User> list = new ArrayList<>();
+		Statement statement = getStatement(Constant.DATABASENAME);
+		ResultSet resultSet = null;
+		try
+		{
+			resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_USER + ";");
+			while (resultSet.next())
+			{
+				int id = resultSet.getInt("_id");
+				String username = resultSet.getString("username");
+				String password = resultSet.getString("password");
+				boolean manager = resultSet.getBoolean("manager");
+				list.add(new User(id, username, password, manager));
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public static String getClassName(String code)
+	{
+		Statement statement = getStatement(Constant.DATABASENAME);
+		String name = null;
+		try
+		{
+			ResultSet resultSet = statement.executeQuery("select * from class where code=" + code + ";");
+			while (resultSet.next())
+			{
+				name = resultSet.getString("name");
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return name;
 	}
 
 	public static int insertToTable(String tableName, String columns, Object data)
@@ -231,6 +273,25 @@ public class SqlUtil
 			{
 				k = statement.executeUpdate("update " + Constant.TABLENAME_CLASS + " " + student.update()
 						+ " where _id=" + student.get_id() + ";");
+			} catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return k;
+	}
+
+	public static int updateUser(User user)
+	{
+		int k = 0;
+		Statement statement = getStatement(Constant.DATABASENAME);
+		if (statement != null)
+		{
+			try
+			{
+				k = statement.executeUpdate("update " + Constant.TABLENAME_USER + " " + user.update() + " where _id="
+						+ user.get_id() + ";");
 			} catch (SQLException e)
 			{
 				// TODO Auto-generated catch block

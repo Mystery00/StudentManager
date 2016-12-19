@@ -19,7 +19,7 @@ public class User
 		this.password = password;
 		this.manager = manager;
 	}
-	
+
 	public int get_id()
 	{
 		return _id;
@@ -27,7 +27,7 @@ public class User
 
 	public String getUsername()
 	{
-		return "'" + username + "'";
+		return username;
 	}
 
 	public void setUsername(String username)
@@ -37,7 +37,7 @@ public class User
 
 	public String getPassword()
 	{
-		return "'" + password + "'";
+		return password;
 	}
 
 	public void setPassword(String password)
@@ -56,4 +56,8 @@ public class User
 		return "'" + username + "','" + password + "'," + manager;
 	}
 
+	public String update()
+	{
+		return "set username='" + username + "',password='" + password + "',manager=" + manager;
+	}
 }

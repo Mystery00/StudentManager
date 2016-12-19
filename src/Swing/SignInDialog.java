@@ -6,6 +6,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import Class.User;
@@ -27,7 +28,7 @@ public class SignInDialog extends JDialog
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField textField_Username;
-	private JTextField textField_Password;
+	private JPasswordField textField_Password;
 	private JButton btnLogin;
 	private JButton btnRegister;
 
@@ -90,7 +91,7 @@ public class SignInDialog extends JDialog
 		textField_Username.setBounds(135, 45, 200, 21);
 		getContentPane().add(textField_Username);
 
-		textField_Password = new JTextField();
+		textField_Password = new JPasswordField();
 		textField_Password.setForeground(Color.BLACK);
 		textField_Password.setBounds(135, 105, 200, 21);
 		getContentPane().add(textField_Password);
@@ -149,7 +150,7 @@ public class SignInDialog extends JDialog
 	private void login()
 	{
 		String username = textField_Username.getText().toString().trim();
-		String password = textField_Password.getText().toString().trim();
+		String password = new String(textField_Password.getPassword());
 		User corretUser = new User(username, password);
 		User user = null;
 		ResultSet set = SqlUtil.searchUser(corretUser);
@@ -165,7 +166,6 @@ public class SignInDialog extends JDialog
 			set.close();
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (result)

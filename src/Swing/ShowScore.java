@@ -13,14 +13,14 @@ import Method.SqlUtil;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 
-public class ShowClass
+public class ShowScore
 {
 	private static JFrame frame = new JFrame("\u6210\u7EE9\u67E5\u8BE2");
 
 	/**
 	 * Create the frame.
 	 */
-	public ShowClass(List<Score> list)
+	public ShowScore(List<Score> list)
 	{
 		Object[][] data = new Object[list.size()][2];
 		for (int i = 0; i < list.size(); i++)
@@ -32,7 +32,7 @@ public class ShowClass
 		JLabel show_label = new JLabel("\u5B66\u53F7\uFF1A" + list.get(0).getNumber());
 		frame.getContentPane().add(show_label, BorderLayout.NORTH);
 
-		JTable table = new JTable(data, Constant.CLASS);
+		JTable table = new JTable(data, Constant.SCORE);
 		JScrollPane jScrollPane = new JScrollPane(table);
 		frame.getContentPane().add(jScrollPane);
 		frame.setResizable(false);
