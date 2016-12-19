@@ -124,6 +124,7 @@ public class Main extends JFrame
 		menu_edit.add(menuItem_search);
 
 		menu_manager = new JMenu("\u7BA1\u7406\u5458\u64CD\u4F5C");
+		menu_manager.setVisible(false);
 		menuBar.add(menu_manager);
 
 		menuItem_class = new JMenuItem("\u8BFE\u7A0B\u7BA1\u7406");
