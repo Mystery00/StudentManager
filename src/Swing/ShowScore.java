@@ -25,12 +25,6 @@ public class ShowScore extends JDialog
 		setBounds(100, 100, 226, 300);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
-		if (list.size() == 0)
-		{
-			JOptionPane.showMessageDialog(null, "该学生无成绩信息！");
-			dispose();
-			return;
-		}
 		Object[][] data = new Object[list.size()][2];
 		for (int i = 0; i < list.size(); i++)
 		{

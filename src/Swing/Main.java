@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import Class.BackgroundPanel;
+import Class.Score;
 import Class.Student;
 import Class.User;
 import Const.Constant;
@@ -312,10 +313,15 @@ public class Main extends JFrame
 			{
 				if (table.getSelectedRow() != -1)
 				{
+					List<Score> list = SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber());
+					if (list.size() == 0)
+					{
+						JOptionPane.showMessageDialog(null, "该学生无成绩信息！");
+						return;
+					}
 					try
 					{
-						ShowScore dialog = new ShowScore(
-								SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber()));
+						ShowScore dialog = new ShowScore(list);
 						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 						dialog.setVisible(true);
 					} catch (Exception e1)
