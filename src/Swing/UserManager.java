@@ -6,12 +6,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import Class.User;
 import Const.Constant;
@@ -28,7 +34,13 @@ public class UserManager extends JDialog
 	private JMenuItem mEdt;
 	private JMenuItem mDel;
 	private JMenuItem mIns;
+	private JMenuItem mSear;
 	private JMenuItem mRef;
+	private JTextField search_text;
+	private JButton btn_done;
+	private JComboBox<String> search_type;
+	private JLabel label;
+	private JPanel panel;
 
 	public UserManager()
 	{
@@ -39,7 +51,27 @@ public class UserManager extends JDialog
 	private void initialize()
 	{
 		setTitle("\u7528\u6237\u7BA1\u7406");
-		setBounds(100, 100, 300, 300);
+		setBounds(100, 100, 400, 300);
+		
+		panel = new JPanel();
+		panel.setBounds(0, 0, 400, 36);
+		panel.setVisible(false);
+		getContentPane().add(panel);
+
+		label = new JLabel("\u67E5\u627E\u7C7B\u578B\uFF1A");
+		panel.add(label);
+
+		search_type = new JComboBox<>();
+		search_type.setModel(new DefaultComboBoxModel<>(Constant.STUDENT));
+		search_type.setSelectedIndex(-1);
+		panel.add(search_type);
+
+		search_text = new JTextField();
+		search_text.setColumns(20);
+		panel.add(search_text);
+
+		btn_done = new JButton("\u786E\u8BA4");
+		panel.add(btn_done);
 
 		table = new JTable();
 		TableRefreshNotify.refresh(table, getData(list), Constant.USER);
@@ -54,6 +86,9 @@ public class UserManager extends JDialog
 
 		mDel = new JMenuItem("É¾³ý");
 		jPopupMenu.add(mDel);
+		
+		mSear=new JMenuItem("ËÑË÷");
+		jPopupMenu.add(mSear);
 
 		mRef = new JMenuItem("Ë¢ÐÂ");
 		jPopupMenu.add(mRef);
@@ -119,11 +154,20 @@ public class UserManager extends JDialog
 				}
 			}
 		});
+		mSear.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				panel.setVisible(true);
+			}
+		});
 		mRef.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				panel.setVisible(false);
 				list = SqlUtil.getUser();
 				TableRefreshNotify.refresh(table, getData(list), Constant.USER);
 			}

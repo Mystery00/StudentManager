@@ -30,6 +30,7 @@ public class SignInDialog extends JDialog
 	private JPasswordField textField_Password;
 	private JButton btnLogin;
 	private JButton btnRegister;
+	private int count;
 
 	/**
 	 * Launch the application.
@@ -149,6 +150,7 @@ public class SignInDialog extends JDialog
 
 	private void login()
 	{
+		count++;
 		String username = textField_Username.getText().toString().trim();
 		String password = new String(textField_Password.getPassword());
 		User corretUser = new User(username, password);
@@ -176,7 +178,14 @@ public class SignInDialog extends JDialog
 			dispose();
 		} else
 		{
-			JOptionPane.showMessageDialog(null, "信息错误！！！");
+			if (count < 3)
+			{
+				JOptionPane.showMessageDialog(null, "信息错误！！！");
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "错误次数达到三次，系统自动退出！");
+				System.exit(0);
+			}
 		}
 	}
 }

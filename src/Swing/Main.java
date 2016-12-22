@@ -20,9 +20,6 @@ import Method.TableRefreshNotify;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -35,8 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import java.awt.Desktop;
-import java.awt.Desktop.Action;
 import java.awt.Toolkit;
 
 public class Main extends JFrame
@@ -82,7 +77,7 @@ public class Main extends JFrame
 		setResizable(false);
 
 		panel = new JPanel();
-		panel.setBounds(0, 0, 1000, 40);
+		panel.setBounds(0, 0, 1000, 36);
 		panel.setVisible(false);
 		getContentPane().add(panel);
 
@@ -398,7 +393,7 @@ public class Main extends JFrame
 		TableRefreshNotify.refresh(table, getData(list), Constant.STUDENT);
 		if (panel.isVisible())
 		{
-			jScrollPane.setBounds(0, 40, 1000, 25 + 20 * table.getRowCount());
+			jScrollPane.setBounds(0, 36, 1000, 25 + 20 * table.getRowCount());
 		} else
 		{
 			jScrollPane.setBounds(0, 0, 1000, 25 + 20 * table.getRowCount());
