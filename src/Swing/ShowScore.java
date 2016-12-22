@@ -55,13 +55,13 @@ public class ShowScore extends JDialog
 	private void initialize()
 	{
 		setTitle("\u6210\u7EE9\u67E5\u8BE2");
-		setBounds(100, 100, 400, 300);
+		setBounds(100, 100, 500, 300);
 
 		JLabel show_label = new JLabel("\u5B66\u53F7\uFF1A" + list.get(0).getNumber());
 		getContentPane().add(show_label, BorderLayout.SOUTH);
 
 		panel = new JPanel();
-		panel.setBounds(0, 0, 600, 36);
+		panel.setBounds(0, 0, 500, 36);
 		panel.setVisible(false);
 		getContentPane().add(panel, BorderLayout.NORTH);
 

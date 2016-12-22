@@ -31,7 +31,6 @@ public class SqlUtil
 				k = statement.executeUpdate("delete from " + Constant.TABLENAME_USER + " where _id=" + id + ";");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -49,7 +48,6 @@ public class SqlUtil
 				k = statement.executeUpdate("delete from " + Constant.TABLENAME_CLASS + " where _id=" + id + ";");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -67,7 +65,6 @@ public class SqlUtil
 				k = statement.executeUpdate("delete from " + Constant.TABLENAME_SCORE + " where _id=" + id + ";");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -86,7 +83,6 @@ public class SqlUtil
 						"delete from " + Constant.TABLENAME_STUDENT + " where " + columns + "=" + data + ";");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -130,7 +126,6 @@ public class SqlUtil
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
 		}
@@ -163,7 +158,6 @@ public class SqlUtil
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
 		}
@@ -195,7 +189,6 @@ public class SqlUtil
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
 		}
@@ -228,7 +221,6 @@ public class SqlUtil
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
 		}
@@ -245,7 +237,6 @@ public class SqlUtil
 					"select * from " + Constant.TABLENAME_USER + " where username='" + user.getUsername() + "'");
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return resultSet;
@@ -268,7 +259,6 @@ public class SqlUtil
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return list;
@@ -292,7 +282,6 @@ public class SqlUtil
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
 		}
@@ -316,7 +305,6 @@ public class SqlUtil
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return list;
@@ -340,7 +328,6 @@ public class SqlUtil
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return list;
@@ -359,7 +346,6 @@ public class SqlUtil
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return name;
@@ -376,7 +362,6 @@ public class SqlUtil
 				k = statement.executeUpdate("insert into " + tableName + columns + " values(" + data + ");");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -395,7 +380,6 @@ public class SqlUtil
 						+ " where _id=" + student.get_id() + ";");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -414,7 +398,6 @@ public class SqlUtil
 						+ " where _id=" + student.get_id() + ";");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -433,7 +416,6 @@ public class SqlUtil
 						+ user.get_id() + ";");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -452,7 +434,6 @@ public class SqlUtil
 						+ score.get_id() + ";");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -470,7 +451,6 @@ public class SqlUtil
 				k = statement.executeUpdate("create database if not exists " + databaseName + ";");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -488,7 +468,6 @@ public class SqlUtil
 				k = statement.executeUpdate("create table if not exists " + tableName + " (" + columns + ");");
 			} catch (SQLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -512,7 +491,6 @@ public class SqlUtil
 			statement = (Statement) connection.createStatement();
 		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return statement;
