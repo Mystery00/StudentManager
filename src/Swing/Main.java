@@ -273,7 +273,7 @@ public class Main extends JFrame
 					JOptionPane.showMessageDialog(null, "Çë²¹È«ÐÅÏ¢£¡");
 				} else
 				{
-					String[] where = Constant.DATABASE_CODE;
+					String[] where = Constant.DATABASE_CODE_STUDENT;
 					TableRefreshNotify.refresh(table,
 							getData(SqlUtil.searchStudent(where[search_type.getSelectedIndex()],
 									"%" + search_text.getText().toString() + "%")),

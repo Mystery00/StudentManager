@@ -16,8 +16,12 @@ public class Constant
 	public final static String COLUMNS_SCORE = "(number,code,score)";
 	public final static String COLUMNS_CLASS = "(name,code)";
 
-	public static final String[] DATABASE_CODE =
+	public static final String[] DATABASE_CODE_STUDENT =
 	{ "number", "name", "sex", "professional", "college", "birthday", "address", "phone" };
+	public static final String[] DATABASE_CODE_USER =
+	{ "username", "password","manager" };
+	public static final String[] DATABASE_CODE_CLASS =
+	{ "name", "code" };
 	public static final String[] STUDENT =
 	{ "学号", "姓名", "性别", "专业", "学院", "出生日期", "家庭住址", "电话" };
 	public static final String[] PROFESSIONAL =

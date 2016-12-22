@@ -23,6 +23,7 @@ import Class.User;
 import Const.Constant;
 import Method.SqlUtil;
 import Method.TableRefreshNotify;
+import java.awt.BorderLayout;
 
 public class UserManager extends JDialog
 {
@@ -51,18 +52,18 @@ public class UserManager extends JDialog
 	private void initialize()
 	{
 		setTitle("\u7528\u6237\u7BA1\u7406");
-		setBounds(100, 100, 400, 300);
-		
+		setBounds(100, 100, 600, 300);
+
 		panel = new JPanel();
-		panel.setBounds(0, 0, 400, 36);
+		panel.setBounds(0, 0, 600, 36);
 		panel.setVisible(false);
-		getContentPane().add(panel);
+		getContentPane().add(panel, BorderLayout.NORTH);
 
 		label = new JLabel("\u67E5\u627E\u7C7B\u578B\uFF1A");
 		panel.add(label);
 
 		search_type = new JComboBox<>();
-		search_type.setModel(new DefaultComboBoxModel<>(Constant.STUDENT));
+		search_type.setModel(new DefaultComboBoxModel<>(Constant.USER));
 		search_type.setSelectedIndex(-1);
 		panel.add(search_type);
 
@@ -74,9 +75,10 @@ public class UserManager extends JDialog
 		panel.add(btn_done);
 
 		table = new JTable();
+		table.setRowHeight(20);
 		TableRefreshNotify.refresh(table, getData(list), Constant.USER);
 		jScrollPane = new JScrollPane(table);
-		getContentPane().add(jScrollPane);
+		getContentPane().add(jScrollPane, BorderLayout.CENTER);
 
 		mEdt = new JMenuItem("±à¼­");
 		jPopupMenu.add(mEdt);
@@ -86,8 +88,8 @@ public class UserManager extends JDialog
 
 		mDel = new JMenuItem("É¾³ý");
 		jPopupMenu.add(mDel);
-		
-		mSear=new JMenuItem("ËÑË÷");
+
+		mSear = new JMenuItem("ËÑË÷");
 		jPopupMenu.add(mSear);
 
 		mRef = new JMenuItem("Ë¢ÐÂ");
@@ -170,6 +172,23 @@ public class UserManager extends JDialog
 				panel.setVisible(false);
 				list = SqlUtil.getUser();
 				TableRefreshNotify.refresh(table, getData(list), Constant.USER);
+			}
+		});
+		btn_done.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
+				{
+					JOptionPane.showMessageDialog(null, "Çë²¹È«ÐÅÏ¢£¡");
+				} else
+				{
+					String[] where = Constant.DATABASE_CODE_USER;
+					TableRefreshNotify.refresh(table, getData(SqlUtil.searchUser(where[search_type.getSelectedIndex()],
+							"%" + search_text.getText().toString() + "%")), Constant.USER);
+				}
 			}
 		});
 		table.addMouseListener(new MouseAdapter()

@@ -1,18 +1,25 @@
 package Swing;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import Class.Student_Class;
 import Const.Constant;
@@ -29,7 +36,13 @@ public class ClassManager extends JFrame
 	private JMenuItem mEdt;
 	private JMenuItem mDel;
 	private JMenuItem mIns;
+	private JMenuItem mSear;
 	private JMenuItem mRef;
+	private JTextField search_text;
+	private JButton btn_done;
+	private JComboBox<String> search_type;
+	private JLabel label;
+	private JPanel panel;
 
 	public ClassManager()
 	{
@@ -40,7 +53,27 @@ public class ClassManager extends JFrame
 	private void initialize()
 	{
 		setTitle("\u8BFE\u7A0B\u7BA1\u7406");
-		setBounds(100, 100, 300, 300);
+		setBounds(100, 100, 600, 300);
+
+		panel = new JPanel();
+		panel.setBounds(0, 0, 600, 36);
+		panel.setVisible(false);
+		getContentPane().add(panel, BorderLayout.NORTH);
+
+		label = new JLabel("\u67E5\u627E\u7C7B\u578B\uFF1A");
+		panel.add(label);
+
+		search_type = new JComboBox<>();
+		search_type.setModel(new DefaultComboBoxModel<>(Constant.CLASS));
+		search_type.setSelectedIndex(-1);
+		panel.add(search_type);
+
+		search_text = new JTextField();
+		search_text.setColumns(20);
+		panel.add(search_text);
+
+		btn_done = new JButton("\u786E\u8BA4");
+		panel.add(btn_done);
 
 		table = new JTable();
 		TableRefreshNotify.refresh(table, getData(list), Constant.CLASS);
@@ -55,6 +88,9 @@ public class ClassManager extends JFrame
 
 		mDel = new JMenuItem("É¾³ý");
 		jPopupMenu.add(mDel);
+
+		mSear = new JMenuItem("ËÑË÷");
+		jPopupMenu.add(mSear);
 
 		mRef = new JMenuItem("Ë¢ÐÂ");
 		jPopupMenu.add(mRef);
@@ -88,6 +124,14 @@ public class ClassManager extends JFrame
 				classInput.setVisible(true);
 			}
 		});
+		mSear.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				panel.setVisible(true);
+			}
+		});
 		mDel.addActionListener(new ActionListener()
 		{
 			@Override
@@ -113,8 +157,26 @@ public class ClassManager extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				panel.setVisible(false);
 				list = SqlUtil.getStudentClass();
 				TableRefreshNotify.refresh(table, getData(list), Constant.CLASS);
+			}
+		});
+		btn_done.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
+				{
+					JOptionPane.showMessageDialog(null, "Çë²¹È«ÐÅÏ¢£¡");
+				} else
+				{
+					String[] where = Constant.DATABASE_CODE_CLASS;
+					TableRefreshNotify.refresh(table, getData(SqlUtil.searchClass(where[search_type.getSelectedIndex()],
+							"%" + search_text.getText().toString() + "%")), Constant.CLASS);
+				}
 			}
 		});
 		table.addMouseListener(new MouseAdapter()

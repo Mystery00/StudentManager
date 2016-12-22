@@ -119,6 +119,71 @@ public class SqlUtil
 		return students;
 	}
 
+	public static List<User> searchUser(String columns, String data)
+	{
+		List<User> users = new ArrayList<>();
+		Statement statement = getStatement(Constant.DATABASENAME);
+		ResultSet resultSet = null;
+		try
+		{
+			if (columns != null && data != null)
+			{
+				resultSet = statement.executeQuery(
+						"select * from " + Constant.TABLENAME_USER + " where " + columns + " like '" + data + "'");
+			} else
+			{
+				resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_STUDENT);
+			}
+			while (resultSet.next())
+			{
+				int id = resultSet.getInt("_id");
+				String username = resultSet.getString("username");
+				String password = resultSet.getString("password");
+				boolean manager = resultSet.getBoolean("manager");
+				User user = new User(id, username, password, manager);
+				users.add(user);
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
+		}
+		return users;
+	}
+	
+	public static List<Student_Class> searchClass(String columns,String data)
+	{
+		List<Student_Class> student_Classes = new ArrayList<>();
+		Statement statement = getStatement(Constant.DATABASENAME);
+		ResultSet resultSet = null;
+		try
+		{
+			if (columns != null && data != null)
+			{
+				resultSet = statement.executeQuery(
+						"select * from " + Constant.TABLENAME_CLASS + " where " + columns + " like '" + data + "'");
+			} else
+			{
+				resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_CLASS);
+			}
+			while (resultSet.next())
+			{
+				int id = resultSet.getInt("_id");
+				String name = resultSet.getString("name");
+				String code = resultSet.getString("code");
+				Student_Class student_Class=new Student_Class(id, name, code);
+				student_Classes.add(student_Class);
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
+		}
+		return student_Classes;
+	}
+
 	public static ResultSet searchUser(User user)
 	{
 		Statement statement = getStatement(Constant.DATABASENAME);
