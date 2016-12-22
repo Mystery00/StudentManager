@@ -62,6 +62,7 @@ public class Main extends JFrame
 	private JMenu menu_about;
 	private JMenuItem menuItem_code;
 	private JMenuItem menuItem_github;
+	private JMenuItem menuItem_logout;
 
 	public Main(User user)
 	{
@@ -73,7 +74,7 @@ public class Main extends JFrame
 
 	private void initialize()
 	{
-		setTitle("\u5B66\u751F\u4FE1\u606F\u6D4F\u89C8");
+		setTitle("\u5B66\u751F\u7BA1\u7406\u7CFB\u7EDF\uFF08\u5F53\u524D\u7528\u6237\uFF1A"+user.getUsername()+"\uFF09");
 		setBounds(100, 100, 1000, 666);
 		setResizable(false);
 
@@ -104,7 +105,6 @@ public class Main extends JFrame
 		getContentPane().add(jScrollPane);
 
 		JMenuBar menuBar = new JMenuBar();
-		setTitle("\u5B66\u751F\u4FE1\u606F");
 		setJMenuBar(menuBar);
 
 		JMenu menu_main = new JMenu("\u83DC\u5355");
@@ -112,6 +112,9 @@ public class Main extends JFrame
 
 		menuItem_refresh = new JMenuItem("\u5237\u65B0");
 		menu_main.add(menuItem_refresh);
+		
+		menuItem_logout = new JMenuItem("\u6CE8\u9500");
+		menu_main.add(menuItem_logout);
 
 		menuItem_exit = new JMenuItem("\u9000\u51FA");
 
@@ -179,6 +182,16 @@ public class Main extends JFrame
 				search_type.setSelectedItem(-1);
 				panel.setVisible(false);
 				refresh(showList);
+			}
+		});
+		menuItem_logout.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				SignInDialog.main(null);
+				dispose();
 			}
 		});
 		menuItem_exit.addActionListener(new ActionListener()

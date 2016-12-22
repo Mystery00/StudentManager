@@ -29,14 +29,31 @@ public class ScoreInput extends JDialog
 	private JButton btn_done;
 	private JButton btn_reset;
 	private List<Student_Class> list;
-
-	/**
-	 * Create the dialog.
-	 */
+	
 	public ScoreInput()
 	{
 		initialize();
 		monitor();
+	}
+	
+	public ScoreInput(Score score)
+	{
+		this();
+		setDefault(score);
+	}
+
+	private void setDefault(Score score)
+	{
+		number_input.setText(score.getNumber());
+		score_input.setText(String.valueOf(score.getScore()));
+		for (int i = 0; i < list.size(); i++)
+		{
+			if(list.get(i).getCode().equals(score.getCode()))
+			{
+				code_input.setSelectedIndex(i);
+				break;
+			}
+		}
 	}
 
 	private void initialize()

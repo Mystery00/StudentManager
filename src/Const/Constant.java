@@ -22,6 +22,8 @@ public class Constant
 	{ "username", "password","manager" };
 	public static final String[] DATABASE_CODE_CLASS =
 	{ "name", "code" };
+	public static final String[] DATABASE_CODE_SCORE =
+	{ "number", "code","score" };
 	public static final String[] STUDENT =
 	{ "学号", "姓名", "性别", "专业", "学院", "出生日期", "家庭住址", "电话" };
 	public static final String[] PROFESSIONAL =

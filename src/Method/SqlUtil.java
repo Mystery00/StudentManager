@@ -56,6 +56,24 @@ public class SqlUtil
 		return k;
 	}
 
+	public static int deleteScore(int id)
+	{
+		int k = 0;
+		Statement statement = getStatement(Constant.DATABASENAME);
+		if (statement != null)
+		{
+			try
+			{
+				k = statement.executeUpdate("delete from " + Constant.TABLENAME_SCORE + " where _id=" + id + ";");
+			} catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return k;
+	}
+
 	public static int deleteStudent(String columns, String data)
 	{
 		int k = 0;
@@ -151,8 +169,8 @@ public class SqlUtil
 		}
 		return users;
 	}
-	
-	public static List<Student_Class> searchClass(String columns,String data)
+
+	public static List<Student_Class> searchClass(String columns, String data)
 	{
 		List<Student_Class> student_Classes = new ArrayList<>();
 		Statement statement = getStatement(Constant.DATABASENAME);
@@ -172,7 +190,7 @@ public class SqlUtil
 				int id = resultSet.getInt("_id");
 				String name = resultSet.getString("name");
 				String code = resultSet.getString("code");
-				Student_Class student_Class=new Student_Class(id, name, code);
+				Student_Class student_Class = new Student_Class(id, name, code);
 				student_Classes.add(student_Class);
 			}
 		} catch (SQLException e)
@@ -182,6 +200,39 @@ public class SqlUtil
 			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
 		}
 		return student_Classes;
+	}
+
+	public static List<Score> searchScore(String columns, String data)
+	{
+		List<Score> scores = new ArrayList<>();
+		Statement statement = getStatement(Constant.DATABASENAME);
+		ResultSet resultSet = null;
+		try
+		{
+			if (columns != null && data != null)
+			{
+				resultSet = statement.executeQuery(
+						"select * from " + Constant.TABLENAME_SCORE + " where " + columns + " like '" + data + "'");
+			} else
+			{
+				resultSet = statement.executeQuery("select * from " + Constant.TABLENAME_SCORE);
+			}
+			while (resultSet.next())
+			{
+				int id = resultSet.getInt("_id");
+				String number = resultSet.getString("number");
+				String code = resultSet.getString("code");
+				int score = resultSet.getInt("score");
+				Score score2 = new Score(id, number, code, score);
+				scores.add(score2);
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Êý¾Ý¿â´íÎó£¡£¡£¡");
+		}
+		return scores;
 	}
 
 	public static ResultSet searchUser(User user)
