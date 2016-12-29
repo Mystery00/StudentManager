@@ -181,7 +181,7 @@ public class Main extends JFrame
 				search_text.setText(null);
 				search_type.setSelectedItem(-1);
 				panel.setVisible(false);
-				refresh(showList);
+				refresh(SqlUtil.searchStudent());
 			}
 		});
 		menuItem_logout.addActionListener(new ActionListener()
