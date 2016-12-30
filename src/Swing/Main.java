@@ -143,6 +143,7 @@ public class Main extends JFrame
 		menu_manager.add(menuItem_user);
 
 		menu_about = new JMenu("\u5173\u4E8E");
+		menu_about.setVisible(false);
 		menuBar.add(menu_about);
 
 		menuItem_code = new JMenuItem("\u8F6F\u4EF6\u6E90\u7801");
