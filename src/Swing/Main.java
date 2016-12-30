@@ -288,10 +288,8 @@ public class Main extends JFrame
 				} else
 				{
 					String[] where = Constant.DATABASE_CODE_STUDENT;
-					TableRefreshNotify.refresh(table,
-							getData(SqlUtil.searchStudent(where[search_type.getSelectedIndex()],
-									"%" + search_text.getText().toString() + "%")),
-							Constant.STUDENT);
+					refresh(SqlUtil.searchStudent(where[search_type.getSelectedIndex()],
+									"%" + search_text.getText().toString() + "%"));
 				}
 			}
 		});
