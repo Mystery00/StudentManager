@@ -1,26 +1,16 @@
 package Swing;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import Class.User;
 import Const.Constant;
 import Method.InputFormat;
 import Method.SqlUtil;
 
-import java.awt.event.ActionListener;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.Container;
-import java.awt.event.ActionEvent;
 import java.awt.Color;
 
 public class SignInDialog extends JDialog
@@ -37,7 +27,7 @@ public class SignInDialog extends JDialog
 	 */
 	public static void main(String[] args)
 	{
-		/**
+		/*
 		 * 执行数据库建表语句
 		 */
 		SqlUtil.createDatabase(Constant.DATABASENAME);
@@ -46,7 +36,7 @@ public class SignInDialog extends JDialog
 		SqlUtil.createTable(Constant.DATABASENAME, Constant.TABLENAME_SCORE, Constant.TABLE_COLUMNS_SCORE);
 		SqlUtil.createTable(Constant.DATABASENAME, Constant.TABLENAME_CLASS, Constant.TABLE_COLUMNS_CLASS);
 
-		/**
+		/*
 		 * 显示登录界面
 		 */
 		try
@@ -118,32 +108,26 @@ public class SignInDialog extends JDialog
 
 	private void monitor()
 	{
-		btnLogin.addActionListener(new ActionListener()
+		btnLogin.addActionListener(arg0 ->
 		{
-			public void actionPerformed(ActionEvent arg0)
+			if (!InputFormat.isEmpty(textField_Username) && !InputFormat.isEmpty(textField_Password))
 			{
-				if (!InputFormat.isEmpty(textField_Username) && !InputFormat.isEmpty(textField_Password))
-				{
-					login();
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "格式错误！！！");
-				}
+				login();
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "格式错误！！！");
 			}
 		});
-		btnRegister.addActionListener(new ActionListener()
+		btnRegister.addActionListener(arg0 ->
 		{
-			public void actionPerformed(ActionEvent arg0)
+			try
 			{
-				try
-				{
-					SignUpDialog dialog = new SignUpDialog();
-					dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-					dialog.setVisible(true);
-				} catch (Exception e)
-				{
-					e.printStackTrace();
-				}
+				SignUpDialog dialog = new SignUpDialog();
+				dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+				dialog.setVisible(true);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
 			}
 		});
 	}
@@ -151,7 +135,7 @@ public class SignInDialog extends JDialog
 	private void login()
 	{
 		count++;
-		String username = textField_Username.getText().toString().trim();
+		String username = textField_Username.getText().trim();
 		String password = new String(textField_Password.getPassword());
 		User corretUser = new User(username, password);
 		User user = null;
@@ -173,7 +157,7 @@ public class SignInDialog extends JDialog
 		if (result)
 		{
 			Main main = new Main(user);
-			main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 			main.setVisible(true);
 			dispose();
 		} else

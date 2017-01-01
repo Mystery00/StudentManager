@@ -1,7 +1,5 @@
 package Swing;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -98,97 +96,69 @@ public class UserManager extends JDialog
 
 	private void monitor()
 	{
-		mEdt.addActionListener(new ActionListener()
+		mEdt.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if (table.getSelectedColumn() != -1)
-				{
-					try
-					{
-						SignUpDialog dialog = new SignUpDialog(list.get(table.getSelectedRow()));
-						dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-						dialog.setVisible(true);
-					} catch (Exception e1)
-					{
-						e1.printStackTrace();
-					}
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
-				}
-			}
-		});
-		mIns.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			if (table.getSelectedColumn() != -1)
 			{
 				try
 				{
-					SignUpDialog dialog = new SignUpDialog();
+					SignUpDialog dialog = new SignUpDialog(list.get(table.getSelectedRow()));
 					dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e1)
 				{
 					e1.printStackTrace();
 				}
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
 			}
 		});
-		mDel.addActionListener(new ActionListener()
+		mIns.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			try
 			{
-				if (table.getSelectedColumn() != -1)
+				SignUpDialog dialog = new SignUpDialog();
+				dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+				dialog.setVisible(true);
+			} catch (Exception e1)
+			{
+				e1.printStackTrace();
+			}
+		});
+		mDel.addActionListener(e ->
+		{
+			if (table.getSelectedColumn() != -1)
+			{
+				int k = SqlUtil.deleteUser(list.get(table.getSelectedRow()).get_id());
+				if (k == 1)
 				{
-					int k = SqlUtil.deleteUser(list.get(table.getSelectedRow()).get_id());
-					if (k == 1)
-					{
-						list.remove(table.getSelectedRow());
-						JOptionPane.showMessageDialog(null, "删除成功！");
-					}
-					TableRefreshNotify.refresh(table, getData(list), Constant.USER);
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
+					list.remove(table.getSelectedRow());
+					JOptionPane.showMessageDialog(null, "删除成功！");
 				}
-			}
-		});
-		mSear.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				panel.setVisible(true);
-			}
-		});
-		mRef.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				panel.setVisible(false);
-				list = SqlUtil.getUser();
 				TableRefreshNotify.refresh(table, getData(list), Constant.USER);
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
 			}
 		});
-		btn_done.addActionListener(new ActionListener()
+		mSear.addActionListener(arg0 -> panel.setVisible(true));
+		mRef.addActionListener(e ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
+			panel.setVisible(false);
+			list = SqlUtil.getUser();
+			TableRefreshNotify.refresh(table, getData(list), Constant.USER);
+		});
+		btn_done.addActionListener(arg0 ->
+		{
+			if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
 			{
-				if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
-				{
-					JOptionPane.showMessageDialog(null, "请补全信息！");
-				} else
-				{
-					String[] where = Constant.DATABASE_CODE_USER;
-					TableRefreshNotify.refresh(table, getData(SqlUtil.searchUser(where[search_type.getSelectedIndex()],
-							"%" + search_text.getText().toString() + "%")), Constant.USER);
-				}
+				JOptionPane.showMessageDialog(null, "请补全信息！");
+			} else
+			{
+				String[] where = Constant.DATABASE_CODE_USER;
+				TableRefreshNotify.refresh(table, getData(SqlUtil.searchUser(where[search_type.getSelectedIndex()],
+						"%" + search_text.getText() + "%")), Constant.USER);
 			}
 		});
 		table.addMouseListener(new MouseAdapter()

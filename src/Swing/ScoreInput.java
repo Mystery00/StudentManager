@@ -14,8 +14,6 @@ import Method.SqlUtil;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -29,6 +27,8 @@ public class ScoreInput extends JDialog
 	private JButton btn_done;
 	private JButton btn_reset;
 	private List<Student_Class> list;
+	private int tag = 0;
+	private Score score;
 	
 	public ScoreInput()
 	{
@@ -39,6 +39,8 @@ public class ScoreInput extends JDialog
 	public ScoreInput(Score score)
 	{
 		this();
+		tag = 1;
+		this.score = score;
 		setDefault(score);
 	}
 
@@ -108,36 +110,32 @@ public class ScoreInput extends JDialog
 
 	private void monitor()
 	{
-		btn_done.addActionListener(new ActionListener()
+		btn_done.addActionListener(arg0 ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
+			if (InputFormat.isNumber(score_input) && InputFormat.isNumber(number_input))
 			{
-				if (InputFormat.isNumber(score_input) && InputFormat.isNumber(number_input))
+				Student_Class sClass = list.get(code_input.getSelectedIndex());
+				String number = number_input.getText();
+				int score = Integer.parseInt(score_input.getText());
+				if (tag == 0)
 				{
-					Student_Class sClass = list.get(code_input.getSelectedIndex());
-					String number = number_input.getText().toString();
-					int score = Integer.parseInt(score_input.getText().toString());
 					SqlUtil.insertToTable(Constant.TABLENAME_SCORE, Constant.COLUMNS_SCORE,
 							new Score(number, sClass.getCode(), score));
-					JOptionPane.showMessageDialog(null, "录入成功！");
 				} else
 				{
-					JOptionPane.showMessageDialog(null, "格式错误！！！");
+					SqlUtil.update(new Score(this.score.get_id(), number, sClass.getCode(), score));
 				}
+				JOptionPane.showMessageDialog(null, "录入成功！");
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "格式错误！！！");
 			}
 		});
-		btn_reset.addActionListener(new ActionListener()
+		btn_reset.addActionListener(e ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				number_input.setText(null);
-				code_input.setSelectedIndex(-1);
-				score_input.setText(null);
-			}
+			number_input.setText(null);
+			code_input.setSelectedIndex(-1);
+			score_input.setText(null);
 		});
 	}
 }

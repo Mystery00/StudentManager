@@ -42,19 +42,9 @@ public class Student
 		return number;
 	}
 
-	public void setNumber(String number)
-	{
-		this.number = number;
-	}
-
 	public String getName()
 	{
 		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 
 	public int getSex()
@@ -62,19 +52,9 @@ public class Student
 		return sex;
 	}
 
-	public void setSex(int sex)
-	{
-		this.sex = sex;
-	}
-
 	public String getProfessional()
 	{
 		return professional;
-	}
-
-	public void setProfessional(String professional)
-	{
-		this.professional = professional;
 	}
 
 	public String getCollege()
@@ -82,19 +62,9 @@ public class Student
 		return college;
 	}
 
-	public void setCollege(String college)
-	{
-		this.college = college;
-	}
-
 	public Birthday getBirthday()
 	{
 		return birthday;
-	}
-
-	public void setBirthday(Birthday birthday)
-	{
-		this.birthday = birthday;
 	}
 
 	public String getAddress()
@@ -102,19 +72,9 @@ public class Student
 		return address;
 	}
 
-	public void setAddress(String address)
-	{
-		this.address = address;
-	}
-
 	public String getPhone()
 	{
 		return phone;
-	}
-
-	public void setPhone(String phone)
-	{
-		this.phone = phone;
 	}
 
 	@Override

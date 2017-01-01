@@ -16,12 +16,9 @@ public class BrowerOpen
 			try
 			{
 				desktop.browse(new URI(url));
-			} catch (IOException e1)
+			} catch (IOException | URISyntaxException e)
 			{
-				e1.printStackTrace();
-			} catch (URISyntaxException e1)
-			{
-				e1.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 	}

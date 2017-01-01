@@ -9,8 +9,6 @@ import Const.Constant;
 import Method.InputFormat;
 import Method.SqlUtil;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -75,49 +73,39 @@ public class ClassInput extends JDialog
 
 	private void monitor()
 	{
-		btn_done.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if (!InputFormat.isEmpty(name_input) && InputFormat.isNumber(code_input))
-				{
-					List<Student_Class> list = SqlUtil.getClass(code_input.getText().toString().trim());
-					if (list.size() != 0)
-					{
-						tag = 1;
-						local = list.get(0);
-					}
-					if (tag == 0)
-					{
-						Student_Class student_Class = new Student_Class(name_input.getText().toString(),
-								code_input.getText().toString());
-						SqlUtil.insertToTable(Constant.TABLENAME_CLASS, Constant.COLUMNS_CLASS, student_Class);
-					} else
-					{
-						Student_Class student_Class = new Student_Class(local.get_id(), name_input.getText().toString(),
-								code_input.getText().toString());
-						SqlUtil.updateClass(student_Class);
-					}
-					JOptionPane.showMessageDialog(null, "录入成功！");
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "格式错误！");
-				}
-			}
-		});
-		btn_reset.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				name_input.setText(null);
-				code_input.setText(null);
-			}
-		});
-	}
+        btn_done.addActionListener(e ->
+        {
+            if (!InputFormat.isEmpty(name_input) && InputFormat.isNumber(code_input))
+            {
+                List<Student_Class> list = SqlUtil.getClass(code_input.getText().trim());
+                if (list.size() != 0)
+                {
+                    tag = 1;
+                    local = list.get(0);
+                }
+                if (tag == 0)
+                {
+                    Student_Class student_Class = new Student_Class(name_input.getText(),
+                            code_input.getText());
+                    SqlUtil.insertToTable(Constant.TABLENAME_CLASS, Constant.COLUMNS_CLASS, student_Class);
+                } else
+                {
+                    Student_Class student_Class = new Student_Class(local.get_id(), name_input.getText(),
+                            code_input.getText());
+                    SqlUtil.updateClass(student_Class);
+                }
+                JOptionPane.showMessageDialog(null, "录入成功！");
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "格式错误！");
+            }
+        });
+        btn_reset.addActionListener(e ->
+        {
+            name_input.setText(null);
+            code_input.setText(null);
+        });
+    }
 
 	private void setDefault()
 	{

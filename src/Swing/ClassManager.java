@@ -1,8 +1,6 @@
 package Swing;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -98,85 +96,57 @@ public class ClassManager extends JFrame
 
 	private void monitor()
 	{
-		mEdt.addActionListener(new ActionListener()
+		mEdt.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			if (table.getSelectedColumn() != -1)
 			{
-				if (table.getSelectedColumn() != -1)
-				{
-					ClassInput classInput = new ClassInput(list.get(table.getSelectedRow()));
-					classInput.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					classInput.setVisible(true);
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
-				}
-			}
-		});
-		mIns.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				ClassInput classInput = new ClassInput();
+				ClassInput classInput = new ClassInput(list.get(table.getSelectedRow()));
 				classInput.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				classInput.setVisible(true);
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
 			}
 		});
-		mSear.addActionListener(new ActionListener()
+		mIns.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				panel.setVisible(true);
-			}
+			ClassInput classInput = new ClassInput();
+			classInput.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			classInput.setVisible(true);
 		});
-		mDel.addActionListener(new ActionListener()
+		mSear.addActionListener(arg0 -> panel.setVisible(true));
+		mDel.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			if (table.getSelectedColumn() != -1)
 			{
-				if (table.getSelectedColumn() != -1)
+				int k = SqlUtil.deleteClass(list.get(table.getSelectedRow()).get_id());
+				if (k == 1)
 				{
-					int k = SqlUtil.deleteClass(list.get(table.getSelectedRow()).get_id());
-					if (k == 1)
-					{
-						list.remove(table.getSelectedRow());
-						JOptionPane.showMessageDialog(null, "删除成功！");
-					}
-					TableRefreshNotify.refresh(table, getData(list), Constant.CLASS);
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
+					list.remove(table.getSelectedRow());
+					JOptionPane.showMessageDialog(null, "删除成功！");
 				}
-			}
-		});
-		mRef.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				panel.setVisible(false);
-				list = SqlUtil.getStudentClass();
 				TableRefreshNotify.refresh(table, getData(list), Constant.CLASS);
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
 			}
 		});
-		btn_done.addActionListener(new ActionListener()
+		mRef.addActionListener(e ->
 		{
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0)
+			panel.setVisible(false);
+			list = SqlUtil.getStudentClass();
+			TableRefreshNotify.refresh(table, getData(list), Constant.CLASS);
+		});
+		btn_done.addActionListener(arg0 ->
+		{
+			if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
 			{
-				if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
-				{
-					JOptionPane.showMessageDialog(null, "请补全信息！");
-				} else
-				{
-					String[] where = Constant.DATABASE_CODE_CLASS;
-					TableRefreshNotify.refresh(table, getData(SqlUtil.searchClass(where[search_type.getSelectedIndex()],
-							"%" + search_text.getText().toString() + "%")), Constant.CLASS);
-				}
+				JOptionPane.showMessageDialog(null, "请补全信息！");
+			} else
+			{
+				String[] where = Constant.DATABASE_CODE_CLASS;
+				TableRefreshNotify.refresh(table, getData(SqlUtil.searchClass(where[search_type.getSelectedIndex()],
+						"%" + search_text.getText() + "%")), Constant.CLASS);
 			}
 		});
 		table.addMouseListener(new MouseAdapter()

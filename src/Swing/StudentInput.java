@@ -5,8 +5,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import Class.Birthday;
 import Class.Student;
@@ -17,8 +15,6 @@ import Method.SqlUtil;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Calendar;
 
 import javax.swing.ButtonGroup;
@@ -226,115 +222,72 @@ public class StudentInput extends JDialog
 
 	private void monitor()
 	{
-		year_input.addActionListener(new ActionListener()
+		year_input.addActionListener(e ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				month_input.setEnabled(true);
-				year = Integer.parseInt(year_input.getSelectedItem().toString());
-			}
+			month_input.setEnabled(true);
+			year = Integer.parseInt(year_input.getSelectedItem().toString());
 		});
-		month_input.addActionListener(new ActionListener()
+		month_input.addActionListener(arg0 ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				month = Integer.parseInt(month_input.getSelectedItem().toString());
-				setDays(year, month, day_input);
-			}
+			month = Integer.parseInt(month_input.getSelectedItem().toString());
+			setDays(year, month, day_input);
 		});
-		day_input.addActionListener(new ActionListener()
+		day_input.addActionListener(arg0 -> day = Integer.parseInt(day_input.getSelectedItem().toString()));
+		radioButton_boy.addChangeListener(arg0 -> sex = 1);
+		radioButton_girl.addChangeListener(e -> sex = 2);
+		button_done.addActionListener(e ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
+			if (InputFormat.isNumber(number_input) && !InputFormat.isEmpty(name_input)
+					&& InputFormat.isNumber(phone_input) && !InputFormat.isEmpty(address_input)
+					&& !isEmpty(professional_input) && !isEmpty(day_input))
 			{
-				day = Integer.parseInt(day_input.getSelectedItem().toString());
-			}
-		});
-		radioButton_boy.addChangeListener(new ChangeListener()
-		{
-
-			@Override
-			public void stateChanged(ChangeEvent arg0)
-			{
-				sex = 1;
-			}
-		});
-		radioButton_girl.addChangeListener(new ChangeListener()
-		{
-
-			@Override
-			public void stateChanged(ChangeEvent e)
-			{
-				sex = 2;
-			}
-		});
-		button_done.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if (InputFormat.isNumber(number_input) && !InputFormat.isEmpty(name_input)
-						&& InputFormat.isNumber(phone_input) && !InputFormat.isEmpty(address_input)
-						&& !isEmpty(professional_input) && !isEmpty(day_input))
+				String number = number_input.getText().trim();
+				String name = name_input.getText().trim();
+				String professional = professional_input.getSelectedItem().toString();
+				String college = collage_input.getText();
+				Birthday birthday = new Birthday(year + "-" + month + "-" + day);
+				String address = address_input.getText();
+				String phone = phone_input.getText().trim();
+				if (!SqlUtil.searchStudent("number", number).isEmpty())
 				{
-					String number = number_input.getText().toString().trim();
-					String name = name_input.getText().toString().trim();
-					String professional = professional_input.getSelectedItem().toString();
-					String college = collage_input.getText().toString();
-					Birthday birthday = new Birthday(year + "-" + month + "-" + day);
-					String address = address_input.getText().toString();
-					String phone = phone_input.getText().toString().trim();
-					if (!SqlUtil.searchStudent("number", number).isEmpty())
-					{
-						tag = 1;
-						localStudent = SqlUtil.searchStudent("number", number).get(0);
-					}
-					if (tag == 0)
-					{
-						Student student = new Student(number, name, sex, professional, college, birthday, address,
-								phone);
-						SqlUtil.insertToTable(Constant.TABLENAME_STUDENT, Constant.COLUMNS_STUDENT, student);
-					} else
-					{
-						Student student = new Student(localStudent.get_id(), number, name, sex, professional, college,
-								birthday, address, phone);
-						SqlUtil.updateStudent(student);
-					}
-					JOptionPane.showMessageDialog(null, "信息录入成功！！！");
+					tag = 1;
+					localStudent = SqlUtil.searchStudent("number", number).get(0);
+				}
+				if (tag == 0)
+				{
+					Student student = new Student(number, name, sex, professional, college, birthday, address,
+							phone);
+					SqlUtil.insertToTable(Constant.TABLENAME_STUDENT, Constant.COLUMNS_STUDENT, student);
 				} else
 				{
-					System.out.println(InputFormat.isNumber(number_input));
-					System.out.println(!InputFormat.isEmpty(name_input));
-					System.out.println(InputFormat.isNumber(phone_input));
-					System.out.println(!InputFormat.isEmpty(address_input));
-					System.out.println(!isEmpty(professional_input));
-					System.out.println(!isEmpty(day_input));
-					JOptionPane.showMessageDialog(null, "信息错误！！！");
+					Student student = new Student(localStudent.get_id(), number, name, sex, professional, college,
+							birthday, address, phone);
+					SqlUtil.updateStudent(student);
 				}
+				JOptionPane.showMessageDialog(null, "信息录入成功！！！");
+			} else
+			{
+				System.out.println(InputFormat.isNumber(number_input));
+				System.out.println(!InputFormat.isEmpty(name_input));
+				System.out.println(InputFormat.isNumber(phone_input));
+				System.out.println(!InputFormat.isEmpty(address_input));
+				System.out.println(!isEmpty(professional_input));
+				System.out.println(!isEmpty(day_input));
+				JOptionPane.showMessageDialog(null, "信息错误！！！");
 			}
 		});
-		button_reset.addActionListener(new ActionListener()
+		button_reset.addActionListener(arg0 ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				number_input.setText(null);
-				name_input.setText(null);
-				phone_input.setText(null);
-				collage_input.setText(null);
-				address_input.setText(null);
-				radioButton_boy.setSelected(true);
-				professional_input.setSelectedIndex(-1);
-				year_input.setSelectedIndex(0);
-				month_input.setEnabled(false);
-				day_input.setEnabled(false);
-			}
+			number_input.setText(null);
+			name_input.setText(null);
+			phone_input.setText(null);
+			collage_input.setText(null);
+			address_input.setText(null);
+			radioButton_boy.setSelected(true);
+			professional_input.setSelectedIndex(-1);
+			year_input.setSelectedIndex(0);
+			month_input.setEnabled(false);
+			day_input.setEnabled(false);
 		});
 	}
 

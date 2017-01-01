@@ -22,8 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -42,7 +40,6 @@ public class ShowScore extends JDialog
 	private JTextField search_text;
 	private JButton btn_done;
 	private JComboBox<String> search_type;
-	private JLabel label;
 	private JPanel panel;
 
 	public ShowScore(List<Score> list)
@@ -65,7 +62,7 @@ public class ShowScore extends JDialog
 		panel.setVisible(false);
 		getContentPane().add(panel, BorderLayout.NORTH);
 
-		label = new JLabel("\u67E5\u627E\u7C7B\u578B\uFF1A");
+		JLabel label = new JLabel("\u67E5\u627E\u7C7B\u578B\uFF1A");
 		panel.add(label);
 
 		search_type = new JComboBox<>();
@@ -103,85 +100,57 @@ public class ShowScore extends JDialog
 
 	private void monitor()
 	{
-		mEdt.addActionListener(new ActionListener()
+		mEdt.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			if (table.getSelectedColumn() != -1)
 			{
-				if (table.getSelectedColumn() != -1)
-				{
-					ScoreInput scoreInput = new ScoreInput(list.get(table.getSelectedRow()));
-					scoreInput.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					scoreInput.setVisible(true);
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
-				}
-			}
-		});
-		mIns.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				ScoreInput scoreInput = new ScoreInput();
+				ScoreInput scoreInput = new ScoreInput(list.get(table.getSelectedRow()));
 				scoreInput.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				scoreInput.setVisible(true);
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
 			}
 		});
-		mSear.addActionListener(new ActionListener()
+		mIns.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				panel.setVisible(true);
-			}
+			ScoreInput scoreInput = new ScoreInput();
+			scoreInput.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			scoreInput.setVisible(true);
 		});
-		mDel.addActionListener(new ActionListener()
+		mSear.addActionListener(arg0 -> panel.setVisible(true));
+		mDel.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			if (table.getSelectedColumn() != -1)
 			{
-				if (table.getSelectedColumn() != -1)
+				int k = SqlUtil.deleteScore(list.get(table.getSelectedRow()).get_id());
+				if (k == 1)
 				{
-					int k = SqlUtil.deleteScore(list.get(table.getSelectedRow()).get_id());
-					if (k == 1)
-					{
-						list.remove(table.getSelectedRow());
-						JOptionPane.showMessageDialog(null, "删除成功！");
-					}
-					TableRefreshNotify.refresh(table, getData(list), Constant.SCORE);
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
+					list.remove(table.getSelectedRow());
+					JOptionPane.showMessageDialog(null, "删除成功！");
 				}
-			}
-		});
-		mRef.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				panel.setVisible(false);
-				list = SqlUtil.getScore(list.get(0).getNumber());
 				TableRefreshNotify.refresh(table, getData(list), Constant.SCORE);
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
 			}
 		});
-		btn_done.addActionListener(new ActionListener()
+		mRef.addActionListener(e ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
+			panel.setVisible(false);
+			list = SqlUtil.getScore(list.get(0).getNumber());
+			TableRefreshNotify.refresh(table, getData(list), Constant.SCORE);
+		});
+		btn_done.addActionListener(arg0 ->
+		{
+			if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
 			{
-				if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
-				{
-					JOptionPane.showMessageDialog(null, "请补全信息！");
-				} else
-				{
-					String[] where = Constant.DATABASE_CODE_SCORE;
-					TableRefreshNotify.refresh(table, getData(SqlUtil.searchScore(where[search_type.getSelectedIndex()],
-							"%" + search_text.getText().toString() + "%")), Constant.SCORE);
-				}
+				JOptionPane.showMessageDialog(null, "请补全信息！");
+			} else
+			{
+				String[] where = Constant.DATABASE_CODE_SCORE;
+				TableRefreshNotify.refresh(table, getData(SqlUtil.searchScore(where[search_type.getSelectedIndex()],
+						"%" + search_text.getText() + "%")), Constant.SCORE);
 			}
 		});
 		table.addMouseListener(new MouseAdapter()

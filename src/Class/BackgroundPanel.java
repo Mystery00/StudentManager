@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 public class BackgroundPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-	Image im;
+	private Image im;
 
 	public BackgroundPanel(Image im)
 	{

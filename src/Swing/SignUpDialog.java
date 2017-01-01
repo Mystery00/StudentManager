@@ -11,10 +11,8 @@ import Const.Constant;
 import Method.InputFormat;
 import Method.SqlUtil;
 
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 
 public class SignUpDialog extends JDialog
@@ -78,42 +76,38 @@ public class SignUpDialog extends JDialog
 
 	private void monitor()
 	{
-		btnDone.addActionListener(new ActionListener()
+		btnDone.addActionListener(arg0 ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
+			if (!InputFormat.isEmpty(textField_Username) && !InputFormat.isEmpty(textField_Password))
 			{
-				if (!InputFormat.isEmpty(textField_Username) && !InputFormat.isEmpty(textField_Password))
+				String username = textField_Username.getText().trim();
+				String password = textField_Password.getText().trim();
+				User user = new User(username, password);
+				ResultSet set = SqlUtil.searchUser(user);
+				try
 				{
-					String username = textField_Username.getText().toString().trim();
-					String password = textField_Password.getText().toString().trim();
-					User user = new User(username, password);
-					ResultSet set = SqlUtil.searchUser(user);
-					try
+					if (set.next())
 					{
-						if (set.next())
-						{
-							tag = 1;
-							local = new User(set.getInt("_id"), set.getString("username"), set.getString("password"),
-									set.getBoolean("manager"));
-						}
-					} catch (SQLException e)
-					{
-						e.printStackTrace();
+						tag = 1;
+						local = new User(set.getInt("_id"), set.getString("username"), set.getString("password"),
+								set.getBoolean("manager"));
 					}
-					if (tag == 0)
-					{
-						SqlUtil.insertToTable(Constant.TABLENAME_USER, Constant.COLUMNS_USER, user);
-					} else
-					{
-						user = new User(local.get_id(), username, password, manager_input.isSelected());
-						SqlUtil.updateUser(user);
-					}
-					JOptionPane.showMessageDialog(null, "录入成功！！！");
+				} catch (SQLException e)
+				{
+					e.printStackTrace();
+				}
+				if (tag == 0)
+				{
+					SqlUtil.insertToTable(Constant.TABLENAME_USER, Constant.COLUMNS_USER, user);
 				} else
 				{
-					JOptionPane.showMessageDialog(null, "格式错误！！！");
+					user = new User(local.get_id(), username, password, manager_input.isSelected());
+					SqlUtil.updateUser(user);
 				}
+				JOptionPane.showMessageDialog(null, "录入成功！！！");
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "格式错误！！！");
 			}
 		});
 	}

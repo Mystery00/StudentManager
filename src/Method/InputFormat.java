@@ -20,7 +20,7 @@ public class InputFormat
 	public static boolean isNumber(JTextField textField)
 	{
 		Pattern pattern=Pattern.compile("[0-9]+");
-		Matcher matcher=pattern.matcher(textField.getText().toString().trim());
+		Matcher matcher = pattern.matcher(textField.getText().trim());
 		return matcher.matches()&&!isEmpty(textField);
 	}
 }

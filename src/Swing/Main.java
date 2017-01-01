@@ -18,11 +18,9 @@ import Method.BrowerOpen;
 import Method.SqlUtil;
 import Method.TableRefreshNotify;
 
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -49,17 +47,14 @@ public class Main extends JFrame
 	private JTextField search_text;
 	private JButton btn_done;
 	private JComboBox<String> search_type;
-	private JLabel label;
 	private JPanel panel;
 	private JPopupMenu jPopupMenu = new JPopupMenu();
 	private JMenuItem mShow;
 	private JMenuItem mDel;
 	private JMenuItem mEdit;
 	private List<Student> showList;
-	private JMenu menu_manager;
 	private JMenuItem menuItem_class;
 	private JMenuItem menuItem_user;
-	private JMenu menu_about;
 	private JMenuItem menuItem_code;
 	private JMenuItem menuItem_github;
 	private JMenuItem menuItem_logout;
@@ -83,7 +78,7 @@ public class Main extends JFrame
 		panel.setVisible(false);
 		getContentPane().add(panel);
 
-		label = new JLabel("\u67E5\u627E\u7C7B\u578B\uFF1A");
+		JLabel label = new JLabel("\u67E5\u627E\u7C7B\u578B\uFF1A");
 		panel.add(label);
 
 		search_type = new JComboBox<>();
@@ -132,7 +127,7 @@ public class Main extends JFrame
 		menuItem_search = new JMenuItem("\u6570\u636E\u67E5\u8BE2");
 		menu_edit.add(menuItem_search);
 
-		menu_manager = new JMenu("\u7BA1\u7406\u5458\u64CD\u4F5C");
+		JMenu menu_manager = new JMenu("\u7BA1\u7406\u5458\u64CD\u4F5C");
 		menu_manager.setVisible(false);
 		menuBar.add(menu_manager);
 
@@ -142,7 +137,7 @@ public class Main extends JFrame
 		menuItem_user = new JMenuItem("\u7528\u6237\u7BA1\u7406");
 		menu_manager.add(menuItem_user);
 
-		menu_about = new JMenu("\u5173\u4E8E");
+		JMenu menu_about = new JMenu("\u5173\u4E8E");
 		menu_about.setVisible(false);
 		menuBar.add(menu_about);
 
@@ -174,196 +169,120 @@ public class Main extends JFrame
 
 	private void monitor()
 	{
-		menuItem_refresh.addActionListener(new ActionListener()
+		menuItem_refresh.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			search_text.setText(null);
+			search_type.setSelectedItem(-1);
+			panel.setVisible(false);
+			refresh(SqlUtil.searchStudent());
+		});
+		menuItem_logout.addActionListener(arg0 ->
+		{
+			SignInDialog.main(null);
+			dispose();
+		});
+		menuItem_exit.addActionListener(arg0 -> System.exit(0));
+		menuItem_score_add.addActionListener(e -> new ScoreInput());
+		menuItem_add.addActionListener(actionEvent ->
+		{
+			try
 			{
-				search_text.setText(null);
-				search_type.setSelectedItem(-1);
-				panel.setVisible(false);
-				refresh(SqlUtil.searchStudent());
+				StudentInput dialog = new StudentInput();
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
 			}
 		});
-		menuItem_logout.addActionListener(new ActionListener()
+		menuItem_search.addActionListener(e ->
 		{
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				SignInDialog.main(null);
-				dispose();
-			}
+			panel.setVisible(true);
+			refresh(SqlUtil.searchStudent());
 		});
-		menuItem_exit.addActionListener(new ActionListener()
+		menuItem_class.addActionListener(e ->
 		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				System.exit(0);
-			}
+			ClassManager classManager = new ClassManager();
+			classManager.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			classManager.setVisible(true);
 		});
-		menuItem_score_add.addActionListener(new ActionListener()
-		{
 
-			@Override
-			public void actionPerformed(ActionEvent e)
+		menuItem_user.addActionListener(e ->
+		{
+			UserManager userManager = new UserManager();
+			userManager.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			userManager.setVisible(true);
+		});
+		menuItem_code.addActionListener(e -> BrowerOpen.openUrl("https://github.com/Mystery00/StudentManager"));
+		menuItem_github.addActionListener(e -> BrowerOpen.openUrl("https://github.com/Mystery00"));
+		btn_done.addActionListener(arg0 ->
+		{
+			if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
 			{
-				new ScoreInput();
+				JOptionPane.showMessageDialog(null, "请补全信息！");
+			} else
+			{
+				String[] where = Constant.DATABASE_CODE_STUDENT;
+				refresh(SqlUtil.searchStudent(where[search_type.getSelectedIndex()],
+						"%" + search_text.getText() + "%"));
 			}
 		});
-		menuItem_add.addActionListener(new ActionListener()
+		mEdit.addActionListener(arg0 ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent actionEvent)
+			if (table.getSelectedRow() != -1)
 			{
 				try
 				{
-					StudentInput dialog = new StudentInput();
+					StudentInput dialog = new StudentInput(showList.get(table.getSelectedRow()));
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e)
 				{
 					e.printStackTrace();
 				}
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
 			}
 		});
-		menuItem_search.addActionListener(new ActionListener()
+		mShow.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
+			if (table.getSelectedRow() != -1)
 			{
-				panel.setVisible(true);
-				refresh(SqlUtil.searchStudent());
-			}
-		});
-		menuItem_class.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				ClassManager classManager = new ClassManager();
-				classManager.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				classManager.setVisible(true);
-			}
-		});
-
-		menuItem_user.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				UserManager userManager = new UserManager();
-				userManager.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				userManager.setVisible(true);
-			}
-		});
-		menuItem_code.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				BrowerOpen.openUrl("https://github.com/Mystery00/StudentManager");
-			}
-		});
-		menuItem_github.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				BrowerOpen.openUrl("https://github.com/Mystery00");
-			}
-		});
-		btn_done.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				if (search_type.getSelectedIndex() == -1 || search_text.getText().length() == 0)
+				List<Score> list = SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber());
+				if (list.size() == 0)
 				{
-					JOptionPane.showMessageDialog(null, "请补全信息！");
-				} else
-				{
-					String[] where = Constant.DATABASE_CODE_STUDENT;
-					refresh(SqlUtil.searchStudent(where[search_type.getSelectedIndex()],
-									"%" + search_text.getText().toString() + "%"));
+					JOptionPane.showMessageDialog(null, "该学生无成绩信息！");
+					return;
 				}
+				try
+				{
+					ShowScore dialog = new ShowScore(list);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				} catch (Exception e1)
+				{
+					e1.printStackTrace();
+				}
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "请选择要查看的数据！");
 			}
 		});
-		mEdit.addActionListener(new ActionListener()
+		mDel.addActionListener(e ->
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
+			if (table.getSelectedColumn() != -1)
 			{
-				if (table.getSelectedRow() != -1)
+				int k = SqlUtil.deleteStudent("number", showList.get(table.getSelectedRow()).getNumber());
+				if (k == 1)
 				{
-					try
-					{
-						StudentInput dialog = new StudentInput(showList.get(table.getSelectedRow()));
-						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-						dialog.setVisible(true);
-					} catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "请选择要修改的数据！");
+					showList.remove(table.getSelectedRow());
+					JOptionPane.showMessageDialog(null, "删除成功！");
 				}
-			}
-		});
-		mShow.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
+				refresh(showList);
+			} else
 			{
-				if (table.getSelectedRow() != -1)
-				{
-					List<Score> list = SqlUtil.getScore(showList.get(table.getSelectedRow()).getNumber());
-					if (list.size() == 0)
-					{
-						JOptionPane.showMessageDialog(null, "该学生无成绩信息！");
-						return;
-					}
-					try
-					{
-						ShowScore dialog = new ShowScore(list);
-						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-						dialog.setVisible(true);
-					} catch (Exception e1)
-					{
-						e1.printStackTrace();
-					}
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "请选择要查看的数据！");
-				}
-			}
-		});
-		mDel.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if (table.getSelectedColumn() != -1)
-				{
-					int k = SqlUtil.deleteStudent("number", showList.get(table.getSelectedRow()).getNumber());
-					if (k == 1)
-					{
-						showList.remove(table.getSelectedRow());
-						JOptionPane.showMessageDialog(null, "删除成功！");
-					}
-					refresh(showList);
-				} else
-				{
-					JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
-				}
+				JOptionPane.showMessageDialog(null, "请选择要删除的数据！");
 			}
 		});
 		table.addMouseListener(new MouseAdapter()
